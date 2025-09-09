@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html translate="no" lang="en">
+
+<head>
+  <%- include('./partials/head', {title: "Todo App With Bootstrap" }); %>
+</head>
+
+<body>
+  <%- include('./partials/sidebar'); %>
+  <main>
+    <div class="container h-100 flex-center-center">
+      <div class="text-center flex-center-center flex-column">
+        <h1>404</h1>
+        <p><%= t('pageIsNotFound') %></p>
+        <a href="/" class="btn btn-outline-secondary">
+          <i class="icon" style="width: 18px; height: 18px;"><%- include('./icons/home-icon'); -%></i>
+          <span><%= t('home') %></span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
+</body>
+
+</html>

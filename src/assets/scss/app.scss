@@ -1,0 +1,29 @@
+@use 'sass:color';
+
+// --bs-body-bg: #{color.adjust($blue, $lightness: -5%)};
+
+.sidebar {
+	--bs-body-color: var(--bs-white);
+	--bs-body-color-rgb: #{to-rgb($white)};
+	--bs-body-bg: #{color.adjust($primary, $lightness: -10%)};
+	--bs-body-bg-rgb: #{to-rgb($primary)};
+	--bs-tertiary-bg: #{$blue-600};
+	--border-color: #{rgba($white, 0.25)};
+
+	.dropdown-menu {
+		--bs-dropdown-bg: #{color.adjust($primary, $lightness: -15%)};
+		--bs-dropdown-link-active-bg: #{color.adjust($primary, $lightness: -17%)};
+		--bs-border-color-translucent: #{rgba($white, 0.25)};
+	}
+
+	.btn-primary {
+		--bs-btn-bg: #{color.adjust($primary, $lightness: -9%)};
+		--bs-btn-border-color: #{rgba($white, 0.25)};
+		--bs-btn-hover-bg: #{color.adjust($primary, $lightness: -15%)};
+		--bs-btn-hover-border-color: #{rgba($white, 0.25)};
+		--bs-btn-active-bg: #{color.adjust($primary, $lightness: -15%)};
+		--bs-btn-active-border-color: #{rgba($white, 0.5)};
+		--bs-btn-focus-border-color: #{rgba($white, 0.5)};
+		--bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.2);
+	}
+}

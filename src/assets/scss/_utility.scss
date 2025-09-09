@@ -1,0 +1,17 @@
+@each $color, $value in $colors {
+	@for $i from 1 through 5 {
+		$opacity: $i * 0.1;
+
+		.bg-#{$color}-op-0#{$i}-hover:hover {
+			background-color: rgba(var(--bs-#{$color}-rgb), $opacity);
+		}
+	}
+}
+
+@for $i from 1 through 5 {
+	$size: $i * 5px;
+
+	.w-#{$size} {
+		width: $size;
+	}
+}

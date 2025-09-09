@@ -1,0 +1,35 @@
+import { PASSWORD_TOKEN_COLLECTION } from '@/services/password-token-service';
+import { Db } from 'mongodb';
+
+export const createPasswordTokenSchema = async (db: Db) => {
+	try {
+		await db.createCollection(PASSWORD_TOKEN_COLLECTION, {
+			validator: {
+				$jsonSchema: {
+					bsonType: 'object',
+					additionalProperties: false,
+					properties: {
+						_id: {
+							bsonType: 'objectId',
+						},
+						username: {
+							bsonType: 'string',
+						},
+						createdAt: {
+							bsonType: 'date',
+						},
+					},
+					required: ['username', 'createdAt'],
+				},
+			},
+			validationLevel: 'strict',
+			validationAction: 'error',
+		});
+
+		await db
+			.collection(PASSWORD_TOKEN_COLLECTION)
+			.createIndex({ createdAt: 1 }, { expireAfterSeconds: 60 });
+	} catch (error) {
+		console.log(error);
+	}
+};

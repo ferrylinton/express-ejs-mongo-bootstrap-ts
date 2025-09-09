@@ -1,0 +1,14 @@
+<% 
+locals.className = (locals.className || 'form-control ') + ((locals.errorValidations && locals.errorValidations[id]) ? ' is-invalid' : '');
+%>
+
+
+<label for="<%= id %>" class="form-label"><%= t(id) %></label>
+<textarea id="<%= id %>" name="<%= id %>" placeholder="<%= t(id) %>" class="<%=className%>" rows="<%= locals.rows %>" maxlength="<%=locals.maxlength%>" autocomplete="off" <%=locals.autofocus%>>
+<%= locals.formData ? locals.formData[id] : '' -%>
+</textarea>
+<% if (locals.errorValidations && locals.errorValidations[id]) { %>
+<div class="invalid-feedback">
+  <%= t(errorValidations[id].errors[0]) %>
+</div>
+<% } %>

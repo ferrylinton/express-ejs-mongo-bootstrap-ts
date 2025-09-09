@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html translate="no" lang="en">
+
+<head>
+  <%- include('../partials/head', {title: "Todo App With Bootstrap" }); %>
+</head>
+
+<body>
+  <%- include('../partials/sidebar'); -%>
+  <main>
+    <div class="todoes">
+      <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
+        <h2 class="title">
+          <%- include('../icons/tasks-icon'); %>
+          <span>
+            <%= t('update') %>
+          </span>
+        </h2>
+      </section>
+      <form method="post" action="/todoes/update/<%= id %>" autocomplete="off">
+        <div class="mb-3">
+          <%- include('../partials/input-text', { id: "task", maxLength: 150, isAutofocus: true }); -%>
+        </div>
+        <div class="mb-3">
+          <%- include('../partials/checkbox', { id: "done" }); -%>
+        </div>
+        <div class="d-flex gap-2 my-4">
+          <a href="/" role="button" class="btn btn-secondary btn-icon">
+            <i class="icon" style="width: 22px; height: auto;"><%- include('../icons/previous-icon'); -%></i>
+            <span><%= t('back') %></span>
+          </a>
+          <button type="submit" class="btn btn-primary btn-icon">
+            <i class="icon"><%- include('../icons/save-icon'); -%></i>
+            <span><%= t('save') %></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+  <%- include('../partials/toast'); %>
+  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
+</body>
+
+</html>
