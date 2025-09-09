@@ -45,4 +45,4 @@ export const CAPTCHA_COOKIE_MAX_AGE = parseInt(process.env.CAPTCHA_COOKIE_MAX_AG
 
 export const RATE_LIMIT_WINDOW = parseInt(process.env.RATE_LIMIT_WINDOW || '300');
 
-export const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '100');
+export const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || "100");
