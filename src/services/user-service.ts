@@ -120,6 +120,7 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const createUser = async (createUser: CreateUser, createdBy?: string) => {
+	console.log(createUser);
 	createUser.password = bcrypt.hashSync(createUser.password, 10);
 	const user: Omit<User, 'id'> = {
 		...createUser,
@@ -127,6 +128,8 @@ export const createUser = async (createUser: CreateUser, createdBy?: string) => 
 		createdBy: createdBy || createUser.username,
 		createdAt: new Date(),
 	};
+	console.log("inputttttttttttttttttttttttttttttt");
+	console.log(user);
 	const userCollection = await getCollection<Omit<User, 'id'>>(USER_COLLECTION);
 	return await userCollection.insertOne(user);
 };

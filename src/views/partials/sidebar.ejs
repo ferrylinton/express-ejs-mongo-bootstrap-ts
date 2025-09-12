@@ -96,6 +96,29 @@
             <span>Author</span></a>
         </li>
       </ul>
+
+
+      <div class="m-2 mt-4">
+        <% if(typeof loggedUser !== 'undefined' && loggedUser) { %>
+        <form method="post" action="/logout" autocomplete="off" id="logout-form" novalidate>
+          <button type="button" id="logout-button" class="w-100 btn btn-primary btn-icon">
+            <i class="icon">
+              <%- include('../icons/logout-icon'); -%>
+            </i>
+            <span><%= t('logout') %></span>
+          </button>
+        </form>
+        <% } else { %>
+        <a href="/login" class="btn btn-primary btn-icon">
+          <i class="icon">
+            <%- include('../icons/login-icon'); -%>
+          </i>
+          <span><%= t('login') %></span>
+        </a>
+        <% } %>
+
+      </div>
+
     </aside>
   </div>
 </div>

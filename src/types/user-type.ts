@@ -1,6 +1,10 @@
-import { ValidationError } from './common-type';
-
 export type Role = 'ADMIN' | 'USER';
+
+export type LoggedUser = {
+	id: string;
+	username: string;
+	role: Role;
+};
 
 export type User = {
 	id: string;
@@ -37,10 +41,4 @@ export type ChangePassword = {
 	password: string;
 	updatedBy: string;
 	updatedAt: Date;
-};
-
-export type UserFormProps = {
-	user: Omit<User, 'password'>;
-	errorMessage?: string;
-	validationError?: ValidationError;
 };

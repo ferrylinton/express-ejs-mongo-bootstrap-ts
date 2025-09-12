@@ -1,3 +1,4 @@
+import { MESSAGE } from '@/config/app-constant';
 import { APP_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { COOKIE_LOCALE, DEFAULT_LOCALE, LOCALES } from '@/config/i18n-config';
 import { logger } from '@/config/winston-config';
@@ -83,6 +84,16 @@ export const initLocale = (req: Request<unknown, unknown, unknown, QueryParams>,
 		} else {
 			res.locals.locale = req.cookies[COOKIE_LOCALE];
 		}
+	} catch (error) {
+		logger.error(error);
+	}
+};
+
+export const initToast = (req: Request<unknown, unknown, unknown, QueryParams>, res: Response) => {
+	try {
+		const message = req.cookies[MESSAGE];
+		res.locals.message = message;
+		res.cookie(MESSAGE, '', { expires: new Date(0) });
 	} catch (error) {
 		logger.error(error);
 	}

@@ -19,55 +19,35 @@
       </section>
       <form class="needs-validation" method="post" action="/login" autocomplete="off" novalidate>
         <div class="mb-3">
-          <%- include('./partials/form-input', {type: "email", field: "email", maxlength: 50, formData}); %>
+          <%- include('./partials/input-text', { id: "username", maxLength: 50, autofocus: 'autofocus' }); -%>
         </div>
          <div class="mb-3">
-          <%- include('./partials/form-input', {type: "password", field: "password", maxlength: 50, formData}); %>
+          <%- include('./partials/input-password', {id: "password", maxlength: 50}); %>
         </div>
         <div class="mb-3">
-          <%- include('./partials/form-input', {type: "text", field: "captcha", maxlength: 5, formData}); %>
+          <%- include('./partials/input-text', { id: "captcha", maxLength: 5 }); -%>
         </div>
         <div class="form-capthca">
-          <img id="captchaImage" class="border rounded p-1" src="/captcha" />
-          <button type="button" role="reload-captcha" class="text-secondary text-primary-hover bg-transparent border rounded" onclick="reloadCaptcha()">
+          <img id="captchaImage" class="border rounded p-1" src="/captcha?t=<%= new Date().getTime() %>" />
+          <button type="button" id="reloadCaptchaButton" class="text-secondary text-primary-hover bg-transparent border rounded">
             <%- include('./icons/reload-icon'); -%>
           </button>
         </div>
-        <div class="d-flex gap-2 my-4">
-          <button type="reset" class="btn btn-secondary btn-icon">
-            <i class="icon">
-              <%- include('./icons/reload-icon'); -%>
-            </i>
-            <span><%= t('reset') %></span>
-          </button>
+        <div class="d-flex align-items-center gap-2 my-4">
           <button type="submit" class="btn btn-primary btn-icon">
             <i class="icon">
               <%- include('./icons/login-icon'); -%>
             </i>
             <span><%= t('login') %></span>
           </button>
+          <a href="/register" class="link-primary p-2 px-3 text-uppercase"><%= t('register') %></a>
         </div>
       </form>
     </div>
   </main>
 
-  <% if(typeof message !== 'undefined') { %>
-  <%- include('./partials/toast', {message}); %>
-  <% } %>
+  <%- include('./partials/toast'); -%>
 
-  <script>
-    const reloadCaptcha = function() {
-      const current = new Date();
-      const captchaImage = document.getElementById('captchaImage');
-
-      if (captchaImage) {
-        captchaImage.src = captchaImage.src + '?t=' + current.getTime();
-      }
-
-      console.log(current.getTime());
-
-    }
-  </script>
   <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
 </body>
 

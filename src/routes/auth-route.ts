@@ -1,8 +1,11 @@
-import { login } from '@/services/auth-service';
+import { LOGGED_USER, MESSAGE } from '@/config/app-constant';
+import { AUTH_COOKIE_MAX_AGE, TOAST_COOKIE_MAX_AGE } from '@/config/env-constant';
+import { logger } from '@/config/winston-config';
+import AuthError from '@/errors/auth-error';
+import { authenticate } from '@/services/auth-service';
 import { createUser } from '@/services/user-service';
-import { decrypt } from '@/utils/encrypt-util';
-import { LoginValidation } from '@/validations/auth-validation';
-import { CreateUserValidation } from '@/validations/user-validation';
+import { decrypt, encrypt } from '@/utils/encrypt-util';
+import { LoginValidation, RegisterValidation } from '@/validations/auth-validation';
 import express, { NextFunction, Request, Response } from 'express';
 import { treeifyError } from 'zod';
 
@@ -22,30 +25,57 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 			const captchaFromCookies = req.cookies['captcha'];
 
 			if (!captchaFromCookies) {
-				return res.render('messages/message-create', {
+				return res.render('login', {
 					message: res.t('captchaIsExpired'),
 					formData: req.body,
-					errorValidations: {},
 				});
 			}
 
 			const plainCaptcha = await decrypt(captchaFromCookies);
 			if (plainCaptcha !== validation.data.captcha) {
-				res.render('messages/message-create', {
+				res.render('login', {
 					message: res.t('captchaIsNotMatch'),
 					formData: req.body,
-					errorValidations: {},
 				});
 			} else {
-				const { email, password } = validation.data;
-				await login(email, password);
+				const { username, password } = validation.data;
+				const loggedUser = await authenticate(username, password);
+				const encrypted = await encrypt(JSON.stringify(loggedUser));
+				res.cookie(LOGGED_USER, encrypted, {
+					maxAge: AUTH_COOKIE_MAX_AGE,
+					httpOnly: true,
+				});
+				
 				res.redirect('/');
 			}
 		} else {
-			const { fieldErrors } = validation.error.flatten();
-			res.status(400).json(fieldErrors);
+			const errorValidations = treeifyError(validation.error).properties;
+			res.render('login', {
+				formData: req.body,
+				errorValidations,
+			});
 		}
-		res.render('register');
+	} catch (error) {
+		logger.error(error);
+
+		if (error instanceof AuthError) {
+			const authError = error as AuthError
+			res.render('login', {
+				message: res.t(authError.message),
+				formData: req.body,
+			});
+		} else {
+			next(error);
+		}
+
+
+	}
+};
+
+const postLogout = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		res.cookie(LOGGED_USER, '', { expires: new Date(0) });
+		res.render('login');
 	} catch (error) {
 		next(error);
 	}
@@ -59,22 +89,54 @@ const viewRegister = async (req: Request, res: Response, next: NextFunction) => 
 	}
 };
 
-const postRegister = async (req: Request, res: Response, next: NextFunction) => {
+const postRegister = async (req: Request, res: Response, _next: NextFunction) => {
 	try {
-		const validation = CreateUserValidation.safeParse(req.body);
+		const validation = RegisterValidation.safeParse(req.body);
 
 		if (validation.success) {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { passwordConfirm, ...input } = validation.data;
-			const user = await createUser(input, req.loggedUser.username);
-			res.status(201).json(user);
+			const captchaFromCookies = req.cookies['captcha'];
+
+			if (!captchaFromCookies) {
+				return res.render('register', {
+					message: res.t('captchaIsExpired'),
+					formData: req.body,
+				});
+			}
+
+			const plainCaptcha = await decrypt(captchaFromCookies);
+
+			if (plainCaptcha !== validation.data.captcha) {
+				res.render('register', {
+					message: res.t('captchaIsNotMatch'),
+					formData: req.body,
+				});
+			} else {
+				const { username, email, password } = validation.data;
+				await createUser({ role: 'USER', username, email, password });
+
+				res.cookie(MESSAGE, res.t('dataIsCreated'), {
+					maxAge: TOAST_COOKIE_MAX_AGE,
+					httpOnly: true,
+				});
+
+				res.redirect('/register');
+			}
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
-			res.status(400).json(errorValidations);
+			res.render('register', {
+				formData: req.body,
+				errorValidations,
+			});
 		}
-		res.render('register');
-	} catch (error) {
-		next(error);
+
+	} catch (error: any) {
+		logger.error(error);
+		const message = error.message;
+		res.render('register', {
+			message,
+			messageType: 'error',
+			formData: req.body,
+		});
 	}
 };
 
@@ -102,6 +164,8 @@ const router = express.Router();
 router.get('/login', viewLogin);
 
 router.post('/login', postLogin);
+
+router.post('/logout', postLogout);
 
 router.get('/register', viewRegister);
 

@@ -43,6 +43,8 @@ export const TOAST_COOKIE_MAX_AGE = parseInt(process.env.TOAST_COOKIE_MAX_AGE ||
 
 export const CAPTCHA_COOKIE_MAX_AGE = parseInt(process.env.CAPTCHA_COOKIE_MAX_AGE || '300') * 1000;
 
+export const AUTH_COOKIE_MAX_AGE = parseInt(process.env.AUTH_COOKIE_MAX_AGE || '86400') * 1000;
+
 export const RATE_LIMIT_WINDOW = parseInt(process.env.RATE_LIMIT_WINDOW || '300');
 
-export const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || "100");
+export const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '100');

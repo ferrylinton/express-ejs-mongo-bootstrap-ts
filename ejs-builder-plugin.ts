@@ -6,14 +6,17 @@ import { OutputBundle } from 'rollup';
 import { nodeExternals } from 'rollup-plugin-node-externals';
 import { build, PluginOption, ResolvedConfig } from 'vite';
 
+
 let source: Record<string, any>;
+
+const regex = /node_modules|\.ts|\.mjs|\.json/;
 
 async function copyEjsFiles(bundle: OutputBundle, outDir: string, hash: string) {
 	const ejsFiles = sync('./src/views/**/*.ejs'.replace(/\\/g, '/'));
 	const regex = /<script.*(\/script>)/gs;
 
 	for (let i = 0; i < ejsFiles.length; i++) {
-		let file = ejsFiles[i].replace('src', outDir);
+		const file = ejsFiles[i].replace('src', outDir);
 		let content = fse.readFileSync(ejsFiles[i], 'utf-8');
 
 		if (file.includes('head')) {
@@ -75,18 +78,11 @@ export const ejsBuilder = (hash: string): PluginOption => {
 
 			async configureServer(server) {
 				server.middlewares.use(async (req, res, next) => {
-					if (
-						req.url?.includes('/@vite/client') ||
-						req.url?.endsWith('.html') ||
-						req.url?.includes('node_modules') ||
-						req.url?.includes('.ts') ||
-						req.url?.includes('.mjs') ||
-						req.url?.includes('.json')
-					) {
+					
+					if (regex.test(req.url || '')) {
 						next();
 					} else {
 						try {
-							console.log(req.url);
 							if (!source) {
 								source = await server.ssrLoadModule('./src/app.ts');
 							}
@@ -103,8 +99,8 @@ export const ejsBuilder = (hash: string): PluginOption => {
 			},
 
 			handleHotUpdate({ file, server }) {
-				if (file.endsWith('.json')) {
-					console.log('reloading json file...');
+				if (regex.test(file)) {
+					console.log(`reloading ${file} ...`);
 					server.restart();
 				} else {
 					server.ws.send({

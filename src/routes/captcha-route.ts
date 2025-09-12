@@ -3,7 +3,7 @@ import { generateCoreCaptcha, generateRandomText } from '@/services/captcha-serv
 import { encrypt } from '@/utils/encrypt-util';
 import express, { NextFunction, Request, Response } from 'express';
 
-const viewCaptchaHandler = async (req: Request, res: Response, next: NextFunction) => {
+const viewCaptchaHandler = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		const randomText = generateRandomText(true, 5, true);
 		const canvas = generateCoreCaptcha(randomText);

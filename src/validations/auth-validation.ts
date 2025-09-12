@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const LoginValidation = z.object({
-	email: z.email({ message: 'invalid.email' }).max(50, 'invalid.email'),
+	username: z.string().min(3, 'invalid.username').max(20, 'invalid.username'),
 	password: z.string().min(6, 'invalid.password').max(30, 'invalid.password'),
 	captcha: z
 		.string({ message: 'invalid.captcha' })
@@ -11,6 +11,7 @@ export const LoginValidation = z.object({
 
 export const RegisterValidation = z
 	.object({
+		username: z.string().min(3, 'invalid.username').max(20, 'invalid.username'),
 		email: z.email({ message: 'invalid.email' }).max(50, 'invalid.email'),
 		password: z.string().min(6, 'invalid.password').max(30, 'invalid.password'),
 		passwordConfirm: z
