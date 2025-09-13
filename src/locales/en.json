@@ -64,7 +64,7 @@
 	"invalid.email": "Invalid email",
 	"invalidUsernameOrPassword": "Invalid username or password",
 	"usernameIsLocked": "Username is locked",
-	"usernameIsNotFound": "Username is not found", 
+	"usernameIsNotFound": "Username is not found",
 	"locked": "Locked",
 	"logout": "Logout",
 	"logoutMessage": "Logout ?",

@@ -63,7 +63,7 @@
 	"invalid.email": "Email tidak valid",
 	"invalidUsernameOrPassword": "Nama Pengguna atau kata sandi tidak valid",
 	"usernameIsLocked": "Nama Pengguna dikunci",
-	"usernameIsNotFound": "Nama Pengguna tidak ditemukan", 
+	"usernameIsNotFound": "Nama Pengguna tidak ditemukan",
 	"locked": "Terkunci",
 	"logout": "Keluar",
 	"logoutMessage": "Keluar ?",
