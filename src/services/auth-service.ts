@@ -10,13 +10,12 @@ export const authenticate = async (username: string, password: string): Promise<
 
 	if (user) {
 		if (bcrypt.compareSync(password, user.password)) {
-
 			if (user.locked) {
 				throw new AuthError('usernameIsLocked');
 			}
 
-			const { id, username, role } = user;
-			return { id, username, role };
+			const { id, username, email, role } = user;
+			return { id, username, email, role };
 		} else {
 			throw new AuthError('invalidUsernameOrPassword');
 		}
@@ -26,7 +25,6 @@ export const authenticate = async (username: string, password: string): Promise<
 };
 
 export const extractLoggedUser = async (encrypted: string | null) => {
-
 	try {
 		if (encrypted) {
 			const decrypted = await decrypt(encrypted);
@@ -41,4 +39,4 @@ export const extractLoggedUser = async (encrypted: string | null) => {
 	}
 
 	return null;
-}
+};

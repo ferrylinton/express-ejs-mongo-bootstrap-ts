@@ -27,7 +27,8 @@ export class Todo {
 				try {
 					event.preventDefault();
 					const target = event.target as HTMLInputElement;
-					const answer = await confirm();
+					const message = target.getAttribute('data-message');
+					const answer = await confirm(message);
 
 					if (answer) {
 						await apiClient.put(`/api/todoes/${target.id}`);
@@ -48,8 +49,10 @@ export class Todo {
 					const { currentTarget } = event;
 
 					if (currentTarget) {
-						const id = (currentTarget as HTMLButtonElement).getAttribute('data-delete');
-						const answer = await confirm();
+						const target = currentTarget as HTMLButtonElement;
+						const id = target.getAttribute('data-delete');
+						const message = target.getAttribute('data-message');
+						const answer = await confirm(message);
 
 						if (answer) {
 							await apiClient.delete(`/api/todoes/${id}`);

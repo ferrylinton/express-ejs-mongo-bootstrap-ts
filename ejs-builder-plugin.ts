@@ -6,10 +6,10 @@ import { OutputBundle } from 'rollup';
 import { nodeExternals } from 'rollup-plugin-node-externals';
 import { build, PluginOption, ResolvedConfig } from 'vite';
 
-
 let source: Record<string, any>;
 
 const regex = /node_modules|\.ts|\.mjs|\.json/;
+const hotReloadRegex = /\.css|\.ts|\.mjs|\.json/;
 
 async function copyEjsFiles(bundle: OutputBundle, outDir: string, hash: string) {
 	const ejsFiles = sync('./src/views/**/*.ejs'.replace(/\\/g, '/'));
@@ -78,7 +78,6 @@ export const ejsBuilder = (hash: string): PluginOption => {
 
 			async configureServer(server) {
 				server.middlewares.use(async (req, res, next) => {
-					
 					if (regex.test(req.url || '')) {
 						next();
 					} else {
@@ -99,7 +98,7 @@ export const ejsBuilder = (hash: string): PluginOption => {
 			},
 
 			handleHotUpdate({ file, server }) {
-				if (regex.test(file)) {
+				if (hotReloadRegex.test(file)) {
 					console.log(`reloading ${file} ...`);
 					server.restart();
 				} else {

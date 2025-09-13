@@ -64,13 +64,16 @@
 	"invalid.email": "Invalid email",
 	"invalidUsernameOrPassword": "Invalid username or password",
 	"usernameIsLocked": "Username is locked",
+	"usernameIsNotFound": "Username is not found", 
 	"locked": "Locked",
 	"logout": "Logout",
+	"logoutMessage": "Logout ?",
 	"lock": "Lock",
 	"unlock": "Unlock",
 	"detail": "Detail",
 	"lockUser": "Lock username?",
 	"unlockUser": "Unlock username?",
 	"duplicateData": "Data <u><b>%s</b></u> is already exist",
-	"tooManyRequest": "Too many requests, try again in a few minutes"
+	"tooManyRequest": "Too many requests, try again in a few minutes",
+	"unauthorized": "Unauthorized"
 }

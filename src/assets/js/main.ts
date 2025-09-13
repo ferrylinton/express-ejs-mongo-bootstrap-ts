@@ -59,7 +59,7 @@ const initReloadCaptcha = () => {
 			captchaImageEl.src = captchaImageEl.src.replace(/\?.*/, '') + '?t=' + current.getTime();
 		});
 	}
-}
+};
 
 const initLogout = () => {
 	const logoutButton = document.getElementById('logout-button');
@@ -71,7 +71,9 @@ const initLogout = () => {
 				const { currentTarget } = event;
 
 				if (currentTarget) {
-					const answer = await confirm();
+					const target = event.target as HTMLInputElement;
+					const message = target.getAttribute('data-message');
+					const answer = await confirm(message);
 
 					if (answer) {
 						logoutForm.submit();
@@ -82,7 +84,7 @@ const initLogout = () => {
 			}
 		});
 	}
-}
+};
 
 window.addEventListener('load', () => {
 	// Your TypeScript code to execute after all page resources are loaded

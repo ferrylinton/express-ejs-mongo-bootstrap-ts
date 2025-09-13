@@ -61,15 +61,18 @@
 	"invalid.passwordConfirm": "Konfirmasi kata sandi min 6 dan maks 30 karakter",
 	"notMatch.passwordConfirm": "Konfirmasi kata sandi tidak cocok",
 	"invalid.email": "Email tidak valid",
-	"invalidUsernameOrPassword": "Nama pengguna atau kata sandi tidak valid",
-	"usernameIsLocked": "Nama pengguna dikunci",
+	"invalidUsernameOrPassword": "Nama Pengguna atau kata sandi tidak valid",
+	"usernameIsLocked": "Nama Pengguna dikunci",
+	"usernameIsNotFound": "Nama Pengguna tidak ditemukan", 
 	"locked": "Terkunci",
 	"logout": "Keluar",
+	"logoutMessage": "Keluar ?",
 	"lock": "Kunci",
 	"unlock": "Buka kunci",
 	"detail": "Detil",
 	"lockUser": "Kunci nama pengguna?",
 	"unlockUser": "Buka kunci nama pengguna?",
 	"duplicateData": "Data <u><b>%s</b></u> sudah ada",
-	"tooManyRequest": "Terlalu banyak permintaan, coba lagi dalam beberapa menit"
+	"tooManyRequest": "Terlalu banyak permintaan, coba lagi dalam beberapa menit",
+	"unauthorized": "Tidak punya akses"
 }

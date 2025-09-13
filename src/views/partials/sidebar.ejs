@@ -5,78 +5,19 @@
 <div class="offcanvas-lg offcanvas-start w-auto" data-bs-scroll="true" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
   <div class="offcanvas-body p-0">
     <aside class="sidebar">
-      <div class="sidebar-header">
+      <div class="sidebar-header mb-2">
         <h1 class="sidebar-logo">Todo</h1>
         <button type="button" class="btn d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarOffcanvas" aria-label="Close">
           <%- include('../icons/close-icon'); -%>
         </button>
       </div>
-
-      <div class="w-100 d-flex flex-column align-items-center gap-2 mb-4">
-        <label class="theme-toggle m-auto btn btn-primary" for="theme-toggle-checkbox" title="Toggle theme">
-          <input type="checkbox" id="theme-toggle-checkbox" />
-          <span class="theme-toggle-sr">Toggle theme</span>
-          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="1em" height="1em" fill="currentColor" stroke-linecap="round" class="theme-toggle__classic" viewBox="0 0 32 32">
-            <clipPath id="theme-toggle__classic__cutout">
-              <path d="M0-5h30a1 1 0 0 0 9 13v24H0Z" />
-            </clipPath>
-            <g clip-path="url(#theme-toggle__classic__cutout)">
-              <circle cx="16" cy="16" r="9.34" />
-              <g stroke="currentColor" stroke-width="1.5">
-                <path d="M16 5.5v-4" />
-                <path d="M16 30.5v-4" />
-                <path d="M1.5 16h4" />
-                <path d="M26.5 16h4" />
-                <path d="m23.4 8.6 2.8-2.8" />
-                <path d="m5.7 26.3 2.9-2.9" />
-                <path d="m5.8 5.8 2.8 2.8" />
-                <path d="m23.4 23.4 2.9 2.9" />
-              </g>
-            </g>
-          </svg>
-        </label>
-
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle d-flex align-items-center gap-1 text-capitalize" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <%= bootstrapVariant.name %>
-          </button>
-          <ul class="dropdown-menu shadow">
-            <% bootstrapVariants.forEach((item, index)=> { %>
-            <li>
-              <a class="dropdown-item text-capitalize <%= bootstrapVariant.name === item.name ? 'active' : ''%>" href="?variant=<%= item.name %>">
-                <%= item.name %>
-              </a>
-            </li>
-            <% }); %>
-          </ul>
+      <div class="w-100 d-flex flex-column align-items-center gap-2 p-3 mb-4">
+        <div class="w-100 d-flex justify-content-between gap-2">
+          <%- include('../partials/theme-variant'); -%>
+          <%- include('../partials/theme-toggle'); -%>
         </div>
-
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <section class="d-flex gap-2">
-              <img src="/assets/image/<%=locale%>.png" />
-              <span>
-                <%= locale==='en' ? 'English' : 'Indonesia' %>
-              </span>
-            </section>
-          </button>
-          <ul class="dropdown-menu shadow">
-            <li>
-              <a class="dropdown-item d-flex align-items-center gap-1 <%= locale === 'id' ? 'active' : ''%>" href="?locale=id">
-                <img src="/assets/image/id.png" />
-                <span>Indonesia</span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item d-flex align-items-center gap-1 <%= locale === 'en' ? 'active' : ''%>" href="?locale=en">
-                <img src="/assets/image/en.png" />
-                <span>English</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+        <%- include('../partials/language-menu'); -%>
       </div>
-
       <ul class="sidebar-menu">
         <li>
           <a href="/"><%- include('../icons/home-icon'); -%>
@@ -84,6 +25,14 @@
               <%= t('home') %>
             </span></a>
         </li>
+        <% if(typeof loggedUser !== 'undefined' && loggedUser) { %>
+        <li>
+          <a href="/profile"><%- include('../icons/user-icon'); -%>
+            <span>
+              <%= t('profile') %>
+            </span></a>
+        </li>
+        <% } %>
         <li>
           <a href="/message"><%- include('../icons/message-icon'); %>
             <span>Message</span></a>
@@ -98,10 +47,10 @@
       </ul>
 
 
-      <div class="m-2 mt-4">
+      <div class="m-2 mt-5">
         <% if(typeof loggedUser !== 'undefined' && loggedUser) { %>
         <form method="post" action="/logout" autocomplete="off" id="logout-form" novalidate>
-          <button type="button" id="logout-button" class="w-100 btn btn-primary btn-icon">
+          <button type="button" id="logout-button" data-message="<%= t('logoutMessage') %>" class="w-100 btn btn-primary btn-icon">
             <i class="icon">
               <%- include('../icons/logout-icon'); -%>
             </i>

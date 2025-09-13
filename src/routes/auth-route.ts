@@ -45,8 +45,8 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 					maxAge: AUTH_COOKIE_MAX_AGE,
 					httpOnly: true,
 				});
-				
-				res.redirect('/');
+
+				res.redirect('/profile');
 			}
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
@@ -59,7 +59,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 		logger.error(error);
 
 		if (error instanceof AuthError) {
-			const authError = error as AuthError
+			const authError = error as AuthError;
 			res.render('login', {
 				message: res.t(authError.message),
 				formData: req.body,
@@ -67,21 +67,19 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 		} else {
 			next(error);
 		}
-
-
 	}
 };
 
-const postLogout = async (req: Request, res: Response, next: NextFunction) => {
+const postLogout = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.cookie(LOGGED_USER, '', { expires: new Date(0) });
-		res.render('login');
+		res.redirect('/login');
 	} catch (error) {
 		next(error);
 	}
 };
 
-const viewRegister = async (req: Request, res: Response, next: NextFunction) => {
+const viewRegister = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.render('register');
 	} catch (error) {
@@ -128,7 +126,6 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
 				errorValidations,
 			});
 		}
-
 	} catch (error: any) {
 		logger.error(error);
 		const message = error.message;
@@ -137,22 +134,6 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
 			messageType: 'error',
 			formData: req.body,
 		});
-	}
-};
-
-const viewForgotPassword = async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		res.render('forgot-password');
-	} catch (error) {
-		next(error);
-	}
-};
-
-const viewResetPassword = async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		res.render('reset-password');
-	} catch (error) {
-		next(error);
 	}
 };
 
@@ -170,9 +151,5 @@ router.post('/logout', postLogout);
 router.get('/register', viewRegister);
 
 router.post('/register', postRegister);
-
-router.get('/forgotpassword', viewForgotPassword);
-
-router.get('/resetpassword', viewResetPassword);
 
 export default router;

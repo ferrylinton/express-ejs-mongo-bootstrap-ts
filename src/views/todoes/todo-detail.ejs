@@ -58,14 +58,16 @@
           <i class="icon" style="width: 21px; height: 21px;"><%- include('../icons/previous-icon'); -%></i>
           <span><%= t('back') %></span>
         </a>
-        <button type="button" class="btn btn-danger" data-delete="<%= todo.id %>">
+        <button type="button" class="btn btn-danger" data-message="<%= t('deleteData') %>" data-delete="<%= todo.id %>">
           <i class="icon"><%- include('../icons/delete-icon'); -%></i>
           <span><%= t('delete') %></span>
         </button>
       </div>
     </div>
   </main>
-  <%- include('../partials/confirm', {message: t('deleteData') }); %>
+
+  <%- include('../partials/confirm'); %>
+  <%- include('../partials/confirm'); %>
   <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
 </body>
 

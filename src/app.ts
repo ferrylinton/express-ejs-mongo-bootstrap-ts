@@ -9,8 +9,15 @@ import captchaRoute from '@/routes/captcha-route';
 import messageRoute from '@/routes/message-route';
 import publicRoute from '@/routes/public-route';
 import todoRoute from '@/routes/todo-route';
+import profileRoute from '@/routes/profile-route';
 import { QueryParams } from '@/types/express-type';
-import { getBootstrapVariants, initLocale, initTheme, initToast, initVariant } from '@/utils/app-util';
+import {
+	getBootstrapVariants,
+	initLocale,
+	initTheme,
+	initToast,
+	initVariant,
+} from '@/utils/app-util';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
@@ -58,6 +65,7 @@ app.use(authFilter);
 
 // Routes
 app.use('/', publicRoute);
+app.use('/', profileRoute);
 app.use('/', authRoute);
 app.use('/', messageRoute);
 app.use('/', todoRoute);

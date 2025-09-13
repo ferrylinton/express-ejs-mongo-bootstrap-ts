@@ -1,10 +1,15 @@
 import { Modal } from 'bootstrap';
 
-export const confirm = (): Promise<boolean> => {
+export const confirm = (message: string | null): Promise<boolean> => {
 	const modalElement = document.getElementById('confirm-modal') as HTMLDialogElement;
 	const modal = new Modal(modalElement);
 	const okButton = document.getElementById('confirm-ok');
 	const cancelButton = document.getElementById('confirm-cancel');
+	const confirmMessage = document.getElementById('confirm-message');
+
+	if (confirmMessage && message) {
+		confirmMessage.innerText = message;
+	}
 
 	return new Promise(resolve => {
 		modal.show();

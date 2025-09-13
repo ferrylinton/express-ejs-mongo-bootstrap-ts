@@ -8,10 +8,19 @@
 	}
 }
 
-@for $i from 1 through 5 {
+@for $i from 1 through 10 {
 	$size: $i * 5px;
 
 	.w-#{$size} {
 		width: $size;
+	}
+
+	.h-#{$size} {
+		height: $size;
+	}
+
+	.s-#{$size} {
+		width: $size;
+		height: $size;
 	}
 }

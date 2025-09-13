@@ -1,0 +1,24 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <section class="d-flex gap-2">
+      <img src="/assets/image/<%=locale%>.png" />
+      <span>
+        <%= locale==='en' ? 'English' : 'Indonesia' %>
+      </span>
+    </section>
+  </button>
+  <ul class="dropdown-menu shadow">
+    <li>
+      <a class="dropdown-item d-flex align-items-center gap-1 <%= locale === 'id' ? 'active' : ''%>" href="?locale=id">
+        <img src="/assets/image/id.png" />
+        <span>Indonesia</span>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center gap-1 <%= locale === 'en' ? 'active' : ''%>" href="?locale=en">
+        <img src="/assets/image/en.png" />
+        <span>English</span>
+      </a>
+    </li>
+  </ul>
+</div>

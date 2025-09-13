@@ -1,0 +1,14 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle d-flex align-items-center gap-1 text-capitalize" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= bootstrapVariant.name %>
+  </button>
+  <ul class="dropdown-menu shadow">
+    <% bootstrapVariants.forEach((item, index)=> { %>
+    <li>
+      <a class="dropdown-item text-capitalize <%= bootstrapVariant.name === item.name ? 'active' : ''%>" href="?variant=<%= item.name %>">
+        <%= item.name %>
+      </a>
+    </li>
+    <% }); %>
+  </ul>
+</div>
