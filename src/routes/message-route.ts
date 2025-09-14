@@ -1,13 +1,12 @@
-import { MESSAGE } from '@/config/app-constant';
-import { TOAST_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { logger } from '@/config/winston-config';
 import { createMessage } from '@/services/message-service';
 import { decrypt } from '@/utils/encrypt-util';
+import { toastSuccess } from '@/utils/toast-util';
 import { CreateMessageSchema } from '@/validations/message-validation';
 import express, { NextFunction, Request, Response } from 'express';
 import { treeifyError } from 'zod';
 
-const viewMessageHandler = async (req: Request, res: Response, next: NextFunction) => {
+const viewMessageHandler = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.render('messages/message-create');
 	} catch (error) {
@@ -24,7 +23,7 @@ const createMessageHandler = async (req: Request, res: Response, next: NextFunct
 
 			if (!captchaFromCookies) {
 				return res.render('messages/message-create', {
-					message: res.t('captchaIsExpired'),
+					toast: { message: res.t('captchaIsExpired'), type: 'danger' },
 					formData: req.body,
 				});
 			}
@@ -33,22 +32,18 @@ const createMessageHandler = async (req: Request, res: Response, next: NextFunct
 
 			if (plainCaptcha !== validation.data.captcha) {
 				res.render('messages/message-create', {
-					message: res.t('captchaIsNotMatch'),
+					toast: { message: res.t('captchaIsNotMatch'), type: 'danger' },
 					formData: req.body,
 				});
 			} else {
 				const { message, email } = validation.data;
 				await createMessage({ message, email });
-
-				res.cookie(MESSAGE, res.t('dataIsCreated'), {
-					maxAge: TOAST_COOKIE_MAX_AGE,
-					httpOnly: true,
-				});
-
+				toastSuccess(res, res.t('messageIsSent'));
 				res.redirect('/message');
 			}
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
+			res.status(400);
 			res.render('messages/message-create', {
 				formData: req.body,
 				errorValidations,

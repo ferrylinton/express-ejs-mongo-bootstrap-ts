@@ -1,10 +1,10 @@
-import { LOGGED_USER, MESSAGE } from '@/config/app-constant';
-import { TOAST_COOKIE_MAX_AGE } from '@/config/env-constant';
+import { LOGGED_USER } from '@/config/app-constant';
 import { logger } from '@/config/winston-config';
 import { extractLoggedUser } from '@/services/auth-service';
+import { toastDanger } from '@/utils/toast-util';
 import { NextFunction, Request, Response } from 'express';
 
-const publicUrlRegex = /login|register|about|author|message|captcha/;
+const publicUrlRegex = /login|register|about|author|message|captcha|\/todoes/;
 
 export const authFilter = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -21,10 +21,7 @@ export const authFilter = async (req: Request, res: Response, next: NextFunction
 			next();
 		} else {
 			res.cookie(LOGGED_USER, '', { expires: new Date(0) });
-			res.cookie(MESSAGE, res.t('unauthorized'), {
-				maxAge: TOAST_COOKIE_MAX_AGE,
-				httpOnly: true,
-			});
+			toastDanger(res, res.t('unauthorized'));
 			return res.redirect('/login');
 		}
 	} catch (error) {

@@ -1,79 +1,61 @@
-<!DOCTYPE html>
-<html translate="no" lang="en">
+<div class="todoes">
+  <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
+    <h2 class="title">
+      <%- include('../icons/tasks-icon'); %>
+      <span>
+        <%= t('list') %>
+      </span>
+    </h2>
+  </section>
 
-<head>
-  <%- include('../partials/head', {title: "Todo App With Bootstrap" }); %>
-</head>
+  <% if (todoes.length> 0 ) {%>
 
-<body>
-  <%- include('../partials/sidebar'); %>
-  <main>
-    <div class="todoes">
-      <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
-        <h2 class="title">
-          <%- include('../icons/tasks-icon'); %>
-          <span>
-            <%= t('list') %>
-          </span>
-        </h2>
-      </section>
+  <table class="table table-hover list border-top">
+    <tbody>
+      <% todoes.forEach((todo, index)=> { %>
+      <tr data-done="<%= todo.done %>">
+        <td>
+          <div class="form-check">
+            <input class="form-check-input" data-message="<%=t('updateData')%>" type="checkbox" id="<%= todo.id %>" value="<%= todo.done %>" <%= todo.done ? 'checked' : '' %> />
+          </div>
+        </td>
+        <td>
+          <span class="table-text"> <%= index + 1 %> </span>
+        </td>
+        <td>
+          <span class="text-break"> <%= todo.task %> </span>
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <a href="/todoes/update/<%= todo.id %>" class="link-primary text-decoration-none">
+              <%- include('../icons/update-icon') -%>
+            </a>
+            <a href="/todoes/detail/<%= todo.id %>" class="link-primary text-decoration-none">
+              <%- include('../icons/eye-icon') -%>
+            </a>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
 
-      <% if (todoes.length> 0 ) {%>
+  <% } else { %>
 
-      <table class="table table-hover list border-top">
-        <tbody>
-          <% todoes.forEach((todo, index)=> { %>
-          <tr data-done="<%= todo.done %>">
-            <td>
-              <div class="form-check">
-                <input class="form-check-input" data-message="<%=t('updateData')%>" type="checkbox" id="<%= todo.id %>" value="<%= todo.done %>" <%= todo.done ? 'checked' : '' %> />
-              </div>
-            </td>
-            <td>
-              <span class="table-text"> <%= index + 1 %> </span>
-            </td>
-            <td>
-              <span class="text-break"> <%= todo.task %> </span>
-            </td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/todoes/update/<%= todo.id %>" class="link-primary text-decoration-none">
-                  <%- include('../icons/update-icon') -%>
-                </a>
-                <a href="/todoes/detail/<%= todo.id %>" class="link-primary text-decoration-none">
-                  <%- include('../icons/eye-icon') -%>
-                </a>
-              </div>
-            </td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+  <div class="empty-data text-secondary bg-light-subtle border">
+    <%- include('../icons/empty-icon'); -%>
+    <p>
+      <%= t('noRecords') %>
+    </p>
+  </div>
 
-      <% } else { %>
-
-      <div class="empty-data text-secondary bg-light-subtle border">
-        <%- include('../icons/empty-icon'); -%>
-        <p>
-          <%= t('noRecords') %>
-        </p>
-      </div>
-
-      <% } %>
-      <section class="my-4">
-        <a href="/todoes/create" role="button" class="btn btn-primary btn-lg w-100">
-          <i class="icon"><%- include('../icons/plus-icon'); -%></i>
-          <span>
-            <%= t('create') %>
-          </span>
-        </a>
-      </section>
-    </div>
-  </main>
-
-  <%- include('../partials/confirm'); %>
-  <%- include('../partials/toast'); %>
-  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
-</body>
-
-</html>
+  <% } %>
+  <section class="my-4">
+    <a href="/todoes/create" role="button" class="btn btn-primary btn-lg w-100">
+      <i class="icon"><%- include('../icons/plus-icon'); -%></i>
+      <span>
+        <%= t('create') %>
+      </span>
+    </a>
+  </section>
+</div>

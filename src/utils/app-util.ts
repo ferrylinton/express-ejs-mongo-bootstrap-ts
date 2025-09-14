@@ -1,4 +1,4 @@
-import { MESSAGE } from '@/config/app-constant';
+import { APP_PATH } from '@/config/app-constant';
 import { APP_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { COOKIE_LOCALE, DEFAULT_LOCALE, LOCALES } from '@/config/i18n-config';
 import { logger } from '@/config/winston-config';
@@ -14,11 +14,6 @@ export const VARIANTS = ['default', 'darkly'];
 export const COOKIE_THEME = 'theme';
 export const DEFAULT_THEME = 'light';
 export const THEMES = ['light', 'dark'];
-
-let cssFolder = '';
-
-if (import.meta.env?.PROD) cssFolder = path.join(__dirname, 'assets', 'css');
-else cssFolder = path.join(import.meta.dirname, '../assets', 'css');
 
 export const initTheme = (req: Request<unknown, unknown, unknown, QueryParams>, res: Response) => {
 	try {
@@ -89,23 +84,13 @@ export const initLocale = (req: Request<unknown, unknown, unknown, QueryParams>,
 	}
 };
 
-export const initToast = (req: Request<unknown, unknown, unknown, QueryParams>, res: Response) => {
-	try {
-		const message = req.cookies[MESSAGE];
-		res.locals.message = message;
-		res.cookie(MESSAGE, '', { expires: new Date(0) });
-	} catch (error) {
-		logger.error(error);
-	}
-};
-
 export const getBootstrapVariants = () => {
 	const variants: Record<string, string>[] = [];
 	const names: string[] = [];
 	const currentDate = new Date().getTime();
 
 	try {
-		readdirSync(cssFolder)
+		readdirSync(path.join(APP_PATH, 'assets', 'css'))
 			.filter(file => file.startsWith('bootstrap-'))
 			.forEach(file => {
 				const arr = file.split('-');
@@ -129,4 +114,8 @@ export const getBootstrapVariants = () => {
 	}
 
 	return { variants, names };
+};
+
+export const delay = (ms: number): Promise<void> => {
+	return new Promise(resolve => setTimeout(resolve, ms));
 };

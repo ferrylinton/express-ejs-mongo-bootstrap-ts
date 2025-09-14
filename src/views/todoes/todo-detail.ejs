@@ -1,74 +1,56 @@
-<!DOCTYPE html>
-<html translate="no" lang="en">
+<div class="todoes">
+  <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
+    <h2 class="title">
+      <%- include('../icons/tasks-icon'); %>
+      <span>
+        <%= t('detail') %>
+      </span>
+    </h2>
+  </section>
 
-<head>
-  <%- include('../partials/head', {title: "Todo App With Bootstrap" }); %>
-</head>
+  <table class="table table-striped border detail">
+    <tbody>
+      <tr>
+        <th><%= t('id') %></th>
+        <td>
+          <%= todo.id %>
+        </td>
+      </tr>
+      <tr>
+        <th><%= t('task') %></th>
+        <td>
+          <span class="text-break"> <%= todo.task %> </span>
+        </td>
+      </tr>
+      <tr>
+        <th><%= t('done') %></th>
+        <td>
+          <%= todo.done ? t('yes') : t('no') %>
+        </td>
+      </tr>
+      <tr>
+        <th><%= t('createdAt') %></th>
+        <td data-convertToDate>
+          <%= todo.createdAt %>
+        </td>
+      </tr>
+      <tr>
+        <th><%= t('updatedAt') %></th>
+        <td data-convertToDate>
+          <%= todo.updatedAt %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<body>
-  <%- include('../partials/sidebar'); -%>
-  <main>
-    <div class="todoes">
-      <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
-        <h2 class="title">
-          <%- include('../icons/tasks-icon'); %>
-          <span>
-            <%= t('detail') %>
-          </span>
-        </h2>
-      </section>
-
-      <table class="table table-striped border detail">
-        <tbody>
-          <tr>
-            <th><%= t('id') %></th>
-            <td>
-              <%= todo.id %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= t('task') %></th>
-            <td>
-              <span class="text-break"> <%= todo.task %> </span>
-            </td>
-          </tr>
-          <tr>
-            <th><%= t('done') %></th>
-            <td>
-              <%= todo.done ? t('yes') : t('no') %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= t('createdAt') %></th>
-            <td data-convertToDate>
-              <%= todo.createdAt %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= t('updatedAt') %></th>
-            <td data-convertToDate>
-              <%= todo.updatedAt %>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="d-flex gap-2 my-4">
-        <a href="/" role="button" class="btn btn-secondary">
-          <i class="icon" style="width: 21px; height: 21px;"><%- include('../icons/previous-icon'); -%></i>
-          <span><%= t('back') %></span>
-        </a>
-        <button type="button" class="btn btn-danger" data-message="<%= t('deleteData') %>" data-delete="<%= todo.id %>">
-          <i class="icon"><%- include('../icons/delete-icon'); -%></i>
-          <span><%= t('delete') %></span>
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <%- include('../partials/confirm'); %>
-  <%- include('../partials/confirm'); %>
-  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
-</body>
-
-</html>
+  <div class="d-flex gap-2 my-4">
+    <a href="/" role="button" class="btn btn-secondary">
+      <i class="icon" style="width: 21px; height: 21px;"><%- include('../icons/previous-icon'); -%></i>
+      <span><%= t('back') %></span>
+    </a>
+    <button type="button" class="btn btn-danger" data-message="<%= t('deleteData') %>" data-delete="<%= todo.id %>">
+      <i class="icon"><%- include('../icons/delete-icon'); -%></i>
+      <span><%= t('delete') %></span>
+    </button>
+  </div>
+</div>

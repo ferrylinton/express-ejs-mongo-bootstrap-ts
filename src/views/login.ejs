@@ -1,54 +1,36 @@
-<!DOCTYPE html>
-<html translate="no" lang="en">
-
-<head>
-  <%- include('./partials/head', {title: "Todo App With Bootstrap" }); %>
-</head>
-
-<body>
-  <%- include('./partials/sidebar'); %>
-  <main>
-    <div class="page-container">
-      <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
-        <h2 class="title">
-          <%- include('./icons/login-icon'); %>
-          <span>
-            <%= t('login') %>
-          </span>
-        </h2>
-      </section>
-      <form class="needs-validation" method="post" action="/login" autocomplete="off" novalidate>
-        <div class="mb-3">
-          <%- include('./partials/input-text', { id: "username", maxLength: 50, autofocus: 'autofocus' }); -%>
-        </div>
-         <div class="mb-3">
-          <%- include('./partials/input-password', {id: "password", maxlength: 50}); %>
-        </div>
-        <div class="mb-3">
-          <%- include('./partials/input-text', { id: "captcha", maxLength: 5 }); -%>
-        </div>
-        <div class="form-capthca">
-          <img id="captchaImage" class="border rounded p-1" src="/captcha?t=<%= new Date().getTime() %>" />
-          <button type="button" id="reloadCaptchaButton" class="text-secondary text-primary-hover bg-transparent border rounded">
-            <%- include('./icons/reload-icon'); -%>
-          </button>
-        </div>
-        <div class="d-flex align-items-center gap-2 my-4">
-          <button type="submit" class="btn btn-primary btn-icon">
-            <i class="icon">
-              <%- include('./icons/login-icon'); -%>
-            </i>
-            <span><%= t('login') %></span>
-          </button>
-          <a href="/register" class="link-primary p-2 px-3 text-uppercase"><%= t('register') %></a>
-        </div>
-      </form>
+<div class="page-container">
+  <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
+    <h2 class="title">
+      <%- include('./icons/login-icon'); %>
+      <span>
+        <%= t('login') %>
+      </span>
+    </h2>
+  </section>
+  <form class="needs-validation" method="post" action="/login" autocomplete="off" novalidate>
+    <div class="mb-3">
+      <%- include('./partials/input-text', { id: "username", maxLength: 50, autofocus: 'autofocus' }); -%>
     </div>
-  </main>
-
-  <%- include('./partials/toast'); -%>
-
-  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
-</body>
-
-</html>
+    <div class="mb-3">
+      <%- include('./partials/input-password', {id: "password", maxlength: 50}); %>
+    </div>
+    <div class="mb-3">
+      <%- include('./partials/input-text', { id: "captcha", maxLength: 5 }); -%>
+    </div>
+    <div class="form-capthca">
+      <img id="captchaImage" class="border rounded p-1" src="/captcha?t=<%= new Date().getTime() %>" />
+      <button type="button" id="reloadCaptchaButton" class="text-secondary text-primary-hover bg-transparent border rounded">
+        <%- include('./icons/reload-icon'); -%>
+      </button>
+    </div>
+    <div class="d-flex align-items-center gap-2 my-4">
+      <button type="submit" class="btn btn-primary btn-icon">
+        <i class="icon">
+          <%- include('./icons/login-icon'); -%>
+        </i>
+        <span><%= t('login') %></span>
+      </button>
+      <a href="/register" class="link-primary p-2 px-3 text-uppercase"><%= t('register') %></a>
+    </div>
+  </form>
+</div>

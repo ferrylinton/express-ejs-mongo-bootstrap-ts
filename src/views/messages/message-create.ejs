@@ -1,73 +1,41 @@
-<!DOCTYPE html>
-<html translate="no" lang="en">
-
-<head>
-  <%- include('../partials/head', {title: "Todo App With Bootstrap" }); %>
-</head>
-
-<body>
-  <%- include('../partials/sidebar'); %>
-  <main>
-    <div class="page-container">
-      <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
-        <h2 class="title">
-          <%- include('../icons/message-icon'); %>
-          <span>
-            <%= t('message') %>
-          </span>
-        </h2>
-      </section>
-      <form class="needs-validation" method="post" action="/message" autocomplete="off" novalidate>
-        <div class="mb-3">
-          <%- include('../partials/input-text', { id: "email", maxLength: 150, autofocus: 'autofocus' }); -%>
-        </div>
-        <div class="mb-3">
-          <%- include('../partials/textarea', { id: "message", maxLength: 1000, rows: 3 }); -%>
-        </div>
-        <div class="mb-3">
-          <%- include('../partials/input-text', { id: "captcha", maxLength: 5 }); -%>
-        </div>
-        <div class="form-capthca">
-          <img id="captchaImage" class="border rounded p-1" src="/captcha" />
-          <button type="button" role="reload-captcha" class="text-secondary text-primary-hover bg-transparent border rounded" onclick="window.reloadCaptcha(this)">
-            <%- include('../icons/reload-icon'); -%>
-          </button>
-        </div>
-        <div class="d-flex gap-2 my-4">
-          <button type="reset" class="btn btn-secondary">
-            <i class="icon" style="width: 18px; height: 18px;">
-              <%- include('../icons/reload-icon'); -%>
-            </i>
-            <span><%= t('reset') %></span>
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <i class="icon">
-              <%- include('../icons/send-icon'); -%>
-            </i>
-            <span><%= t('send') %></span>
-          </button>
-        </div>
-      </form>
+<div class="page-container">
+  <section class="d-flex justify-content-center align-items-end gap-2 mt-2 mb-4">
+    <h2 class="title">
+      <%- include('../icons/message-icon'); %>
+      <span>
+        <%= t('message') %>
+      </span>
+    </h2>
+  </section>
+  <form class="needs-validation" method="post" action="/message" autocomplete="off" novalidate>
+    <div class="mb-3">
+      <%- include('../partials/input-text', { id: "email", maxLength: 150, autofocus: 'autofocus' }); -%>
     </div>
-  </main>
-
-  <% if(typeof message !== 'undefined') { %>
-  <%- include('../partials/toast', {message}); %>
-  <% } %>
-
-  <script>
-    window.reloadCaptcha = function() {
-      const current = new Date();
-      const captchaImage = document.getElementById('captchaImage');
-
-      if (captchaImage) {
-        captchaImage.src = captchaImage.src + '?t=' + current.getTime();
-      }
-    }
-  </script>
-
-  <%- include('../partials/confirm'); %>
-  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
-</body>
-
-</html>
+    <div class="mb-3">
+      <%- include('../partials/textarea', { id: "message", maxLength: 1000, rows: 3 }); -%>
+    </div>
+    <div class="mb-3">
+      <%- include('../partials/input-text', { id: "captcha", maxLength: 5 }); -%>
+    </div>
+    <div class="form-capthca">
+      <img id="captchaImage" class="border rounded p-1" src="/captcha" />
+      <button type="button" role="reload-captcha" class="text-secondary text-primary-hover bg-transparent border rounded" onclick="window.reloadCaptcha(this)">
+        <%- include('../icons/reload-icon'); -%>
+      </button>
+    </div>
+    <div class="d-flex gap-2 my-4">
+      <button type="reset" class="btn btn-secondary">
+        <i class="icon" style="width: 18px; height: 18px;">
+          <%- include('../icons/reload-icon'); -%>
+        </i>
+        <span><%= t('reset') %></span>
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <i class="icon">
+          <%- include('../icons/send-icon'); -%>
+        </i>
+        <span><%= t('send') %></span>
+      </button>
+    </div>
+  </form>
+</div>

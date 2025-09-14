@@ -1,10 +1,11 @@
-import { LOGGED_USER, MESSAGE } from '@/config/app-constant';
-import { AUTH_COOKIE_MAX_AGE, TOAST_COOKIE_MAX_AGE } from '@/config/env-constant';
+import { LOGGED_USER } from '@/config/app-constant';
+import { AUTH_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { logger } from '@/config/winston-config';
 import AuthError from '@/errors/auth-error';
 import { authenticate } from '@/services/auth-service';
 import { createUser } from '@/services/user-service';
 import { decrypt, encrypt } from '@/utils/encrypt-util';
+import { toastSuccess } from '@/utils/toast-util';
 import { LoginValidation, RegisterValidation } from '@/validations/auth-validation';
 import express, { NextFunction, Request, Response } from 'express';
 import { treeifyError } from 'zod';
@@ -26,7 +27,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 
 			if (!captchaFromCookies) {
 				return res.render('login', {
-					message: res.t('captchaIsExpired'),
+					toast: { message: res.t('captchaIsExpired'), type: 'danger' },
 					formData: req.body,
 				});
 			}
@@ -34,7 +35,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 			const plainCaptcha = await decrypt(captchaFromCookies);
 			if (plainCaptcha !== validation.data.captcha) {
 				res.render('login', {
-					message: res.t('captchaIsNotMatch'),
+					toast: { message: res.t('captchaIsNotMatch'), type: 'danger' },
 					formData: req.body,
 				});
 			} else {
@@ -61,7 +62,7 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 		if (error instanceof AuthError) {
 			const authError = error as AuthError;
 			res.render('login', {
-				message: res.t(authError.message),
+				toast: { message: res.t(authError.message), type: 'danger' },
 				formData: req.body,
 			});
 		} else {
@@ -96,7 +97,7 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
 
 			if (!captchaFromCookies) {
 				return res.render('register', {
-					message: res.t('captchaIsExpired'),
+					toast: { message: res.t('captchaIsExpired'), type: 'danger' },
 					formData: req.body,
 				});
 			}
@@ -105,18 +106,13 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
 
 			if (plainCaptcha !== validation.data.captcha) {
 				res.render('register', {
-					message: res.t('captchaIsNotMatch'),
+					toast: { message: res.t('captchaIsNotMatch'), type: 'danger' },
 					formData: req.body,
 				});
 			} else {
 				const { username, email, password } = validation.data;
 				await createUser({ role: 'USER', username, email, password });
-
-				res.cookie(MESSAGE, res.t('dataIsCreated'), {
-					maxAge: TOAST_COOKIE_MAX_AGE,
-					httpOnly: true,
-				});
-
+				toastSuccess(res, res.t('dataIsCreated'));
 				res.redirect('/register');
 			}
 		} else {

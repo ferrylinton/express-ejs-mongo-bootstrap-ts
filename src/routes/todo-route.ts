@@ -1,5 +1,3 @@
-import { MESSAGE } from '@/config/app-constant';
-import { TOAST_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { logger } from '@/config/winston-config';
 import {
 	countTodoes,
@@ -9,6 +7,7 @@ import {
 	findTodoes,
 	updateTodo,
 } from '@/services/todo-service';
+import { toastSuccess } from '@/utils/toast-util';
 import { CreateTodoValidation } from '@/validations/todo-validation';
 import express, { NextFunction, Request, Response } from 'express';
 import { treeifyError } from 'zod';
@@ -17,15 +16,7 @@ const viewListHandler = async (req: Request, res: Response, next: NextFunction) 
 	try {
 		const todoes = await findTodoes();
 		const total = await countTodoes();
-		const message = req.cookies[MESSAGE];
-
-		res.cookie(MESSAGE, '', { expires: new Date(0) });
-
-		res.render('todoes/todo-list', {
-			todoes,
-			total,
-			message,
-		});
+		res.render('todoes/todo-list', { todoes, total });
 	} catch (error) {
 		next(error);
 	}
@@ -35,15 +26,13 @@ const viewDetailHandler = async (req: Request, res: Response, next: NextFunction
 	try {
 		const id: string = req.params.id;
 		const todo = await findTodoById(id);
-		res.render('todoes/todo-detail', {
-			todo,
-		});
+		res.render('todoes/todo-detail', { todo });
 	} catch (error) {
 		next(error);
 	}
 };
 
-const viewCreateHandler = async (req: Request, res: Response, next: NextFunction) => {
+const viewCreateHandler = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.render('todoes/todo-create');
 	} catch (error) {
@@ -58,18 +47,14 @@ const createTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 		if (total >= 20) {
 			res.render('todoes/todo-create', {
 				formData: req.body,
-				message: res.t('errorMaxData'),
-				messageType: 'error',
+				toast: { message: res.t('errorMaxData'), type: 'danger' },
 			});
 		} else {
 			const validation = CreateTodoValidation.safeParse(req.body);
 
 			if (validation.success) {
 				await createTodo(validation.data.task);
-				res.cookie(MESSAGE, res.t('dataIsCreated'), {
-					maxAge: TOAST_COOKIE_MAX_AGE,
-					httpOnly: true,
-				});
+				toastSuccess(res, res.t('dataIsCreated'));
 				res.redirect('/');
 			} else {
 				const errorValidations = treeifyError(validation.error).properties;
@@ -85,10 +70,10 @@ const createTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 		const message = (error.message as string).includes('duplicate')
 			? res.t('duplicateData', req.body.task)
 			: error.message;
+
 		res.render('todoes/todo-create', {
 			formData: req.body,
-			message,
-			messageType: 'error',
+			toast: { message, type: 'danger' },
 		});
 	}
 };
@@ -114,11 +99,7 @@ const updateTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 
 		if (validation.success) {
 			await updateTodo(id, validation.data.task, req.body.done === 'on');
-			res.cookie(MESSAGE, res.t('dataIsUpdated', validation.data.task), {
-				maxAge: 3000,
-				httpOnly: true,
-			});
-
+			toastSuccess(res, res.t('dataIsUpdated', validation.data.task));
 			res.redirect('/');
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
@@ -135,9 +116,8 @@ const updateTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 			: error.message;
 		res.render('todoes/todo-update', {
 			id,
-			message,
-			messageType: 'error',
 			formData: req.body,
+			toast: { message, type: 'danger' },
 		});
 	}
 };
@@ -149,10 +129,7 @@ const deleteTodoHandler = async (req: Request, res: Response, next: NextFunction
 
 		if (current) {
 			await deleteTodoById(id);
-			res.cookie(MESSAGE, res.t('dataIsDeleted', current.task), {
-				maxAge: TOAST_COOKIE_MAX_AGE,
-				httpOnly: true,
-			});
+			toastSuccess(res, res.t('dataIsDeleted', current.task));
 		}
 
 		res.status(200).json({ message: 'OK' });
@@ -168,11 +145,7 @@ const toggleStatusHandler = async (req: Request, res: Response, next: NextFuncti
 
 		if (current) {
 			await updateTodo(id, current.task, !current.done);
-			res.locals.message = 'Data is updated';
-			res.cookie(MESSAGE, res.t('dataIsUpdated', current.task), {
-				maxAge: TOAST_COOKIE_MAX_AGE,
-				httpOnly: true,
-			});
+			toastSuccess(res, res.t('dataIsUpdated', current.task));
 		}
 
 		res.status(200).json({ message: 'OK' });

@@ -74,5 +74,6 @@
 	"unlockUser": "Buka kunci nama pengguna?",
 	"duplicateData": "Data <u><b>%s</b></u> sudah ada",
 	"tooManyRequest": "Terlalu banyak permintaan, coba lagi dalam beberapa menit",
-	"unauthorized": "Tidak punya akses"
+	"unauthorized": "Tidak punya akses",
+	"messageIsSent": "Pesan telah dikirim"
 }

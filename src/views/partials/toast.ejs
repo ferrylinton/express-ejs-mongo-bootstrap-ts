@@ -1,8 +1,8 @@
-<% if(typeof message !== 'undefined') { %>
+<% if(typeof toast !== 'undefined') { %>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="messageToast" class="toast border-0 <%= (typeof messageType !== 'undefined' && messageType === 'error' ? 'text-bg-danger' : 'text-bg-success') %>" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="messageToast" class="toast border-0 <%= 'text-bg-' + toast.type %>" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-      <div class="toast-body flex-grow-1"><%- message %></div>
+      <div class="toast-body flex-grow-1"><%- toast.message %></div>
       <button type="button" class="btn-close btn-close-white p-2 m-2" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>

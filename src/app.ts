@@ -11,18 +11,16 @@ import publicRoute from '@/routes/public-route';
 import todoRoute from '@/routes/todo-route';
 import profileRoute from '@/routes/profile-route';
 import { QueryParams } from '@/types/express-type';
-import {
-	getBootstrapVariants,
-	initLocale,
-	initTheme,
-	initToast,
-	initVariant,
-} from '@/utils/app-util';
+import { getBootstrapVariants, initLocale, initTheme, initVariant } from '@/utils/app-util';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
 import favicon from 'express-favicon';
 import path from 'path';
+import expressLayouts from 'express-ejs-layouts';
+import morgan from 'morgan';
+import { v4 as uuidv4 } from 'uuid';
+import { initToast } from './utils/toast-util';
 
 export const app = express();
 app.set('trust proxy', 1);
@@ -34,10 +32,19 @@ i18nConfig(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Set Templating Engine
+app.use(expressLayouts);
+app.set('layout', path.join(APP_PATH, 'views', 'partials', 'layout'));
 app.set('view engine', 'ejs');
-app.use(favicon(path.join(APP_PATH, 'favicon.ico')));
 app.set('views', path.join(APP_PATH, 'views'));
+
+app.use(favicon(path.join(APP_PATH, 'favicon.ico')));
 app.use('/assets', express.static(path.join(APP_PATH, 'assets')));
+
+app.use((req, res, next) => {
+	req.id = uuidv4();
+	next();
+});
 
 app.use(
 	(req: Request<unknown, unknown, unknown, QueryParams>, res: Response, next: NextFunction) => {
@@ -60,6 +67,23 @@ app.use(
 );
 
 // Middlewares
+//app.use(morgan('dev'));
+morgan.token('id', (req: Request<unknown, unknown, unknown, QueryParams>) => req.id);
+app.use(
+	morgan((tokens, req, res) => {
+		const entry = {
+			requestId: tokens.id(req, res),
+			method: tokens.method(req, res),
+			url: tokens.url(req, res),
+			status: parseInt(tokens.status(req, res) || '', 10),
+			responseTime: tokens['response-time'](req, res),
+		};
+		console.log('morgan..............................');
+		console.log(req.body);
+		console.log(entry);
+		return null;
+	})
+);
 app.use(rateLimit);
 app.use(authFilter);
 

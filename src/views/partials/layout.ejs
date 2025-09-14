@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html translate="no" lang="<%= locals.locale %>">
+
+<head>
+  <%- include('./head', {title: "Todo App With Bootstrap" }); %>
+</head>
+
+<body>
+  <%- include('./sidebar'); %>
+  <main>
+    <%- body %>
+  </main>
+
+  <%- include('./confirm'); %>
+  <%- include('./toast'); %>
+  <script type="module" src="/src/assets/js/main.ts?t=<%= new Date().getTime() %>"></script>
+</body>
+
+</html>
