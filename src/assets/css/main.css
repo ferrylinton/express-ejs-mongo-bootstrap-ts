@@ -3,7 +3,6 @@
 @import './sidebar.css';
 @import './about.css';
 
-
 body {
 	display: flex;
 	min-height: 100dvh;
@@ -88,7 +87,8 @@ main {
 		margin: 0;
 	}
 
-	& .form-check-input:focus,  & .form-check-input:active{
+	& .form-check-input:focus,
+	& .form-check-input:active {
 		outline: 0;
 		background-color: rgba(var(--bs-success-rgb), 0.9);
 		box-shadow: 0 0 0 0.25rem rgba(var(--bs-success-rgb), 0.2);
@@ -136,7 +136,6 @@ main {
 			display: inline-block;
 			line-height: var(--td-height);
 		}
-
 	}
 
 	& table.detail {
@@ -282,8 +281,6 @@ main {
 		font-weight: 400;
 		color: var(--bs-secondary);
 	}
-
-
 }
 
 @media (min-width: 576px) {
@@ -306,7 +303,6 @@ main {
 		& h5 {
 			font-size: 1.15rem;
 		}
-
 	}
 }
 
@@ -323,13 +319,12 @@ main {
 	border-radius: 0.2rem;
 	width: 300px;
 
-
 	&:focus-within {
 		color: var(--bs-body-color);
 		background-color: var(--bs-body-bg);
 		border-color: #86b7fe;
 		outline: 0;
-		box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+		box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 	}
 
 	& i {
