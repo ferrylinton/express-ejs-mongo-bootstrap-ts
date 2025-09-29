@@ -1,5 +1,6 @@
 import { logger } from '@/config/winston-config';
-import { createMessage } from '@/services/message-service';
+import { auditTrail } from '@/middlewares/audit-trail';
+import { createMessage, findMessages } from '@/services/message-service';
 import { decrypt } from '@/utils/encrypt-util';
 import { toastSuccess } from '@/utils/toast-util';
 import { CreateMessageSchema } from '@/validations/message-validation';
@@ -9,6 +10,15 @@ import { treeifyError } from 'zod';
 const viewMessageHandler = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.render('messages/message-create');
+	} catch (error) {
+		next(error);
+	}
+};
+
+const viewMessageListHandler = async (_req: Request, res: Response, next: NextFunction) => {
+	try {
+		const pageable = await findMessages(null, 1);
+		res.render('messages/message-list', { pageable });
 	} catch (error) {
 		next(error);
 	}
@@ -60,7 +70,8 @@ const createMessageHandler = async (req: Request, res: Response, next: NextFunct
  */
 const router = express.Router();
 
-router.get('/message', viewMessageHandler);
-router.post('/message', createMessageHandler);
+router.get('/message', auditTrail, viewMessageHandler);
+router.post('/message', auditTrail, createMessageHandler);
+router.get('/data/messages', auditTrail, viewMessageListHandler);
 
 export default router;

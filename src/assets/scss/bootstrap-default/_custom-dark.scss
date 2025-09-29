@@ -1,0 +1,31 @@
+@use 'sass:color';
+
+@import '/node_modules/bootstrap/scss/functions';
+@import "/node_modules/bootstrap/scss/variables";
+@import '/node_modules/bootstrap/scss/mixins';
+
+@include color-mode(dark) {
+    $primary: red; // Example: a darker blue for primary
+
+    $theme-colors: (
+        'primary': $primary,
+        'secondary': $secondary,
+        'success': $success,
+        'info': $info,
+        'warning': $warning,
+        'danger': $danger,
+        'light': $light,
+        'dark': $dark,
+        ) !default;
+}
+
+[data-bs-theme="dark"] {
+
+    $btn-primary-bg : red;
+    $btn-primary-border: color.adjust($primary, $lightness: -18%
+    );
+
+// Recompile button styles with new variables
+@include button-variant($btn-primary-bg,
+    $btn-primary-border );
+}

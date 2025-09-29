@@ -1,4 +1,13 @@
+import { auditTrail } from '@/middlewares/audit-trail';
 import express, { NextFunction, Request, Response } from 'express';
+
+const viewHome = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		res.render('home');
+	} catch (error) {
+		next(error);
+	}
+};
 
 const viewAbout = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -21,8 +30,10 @@ const viewAuthor = async (req: Request, res: Response, next: NextFunction) => {
  */
 const router = express.Router();
 
-router.get('/about', viewAbout);
+router.get('/', auditTrail, viewHome);
 
-router.get('/author', viewAuthor);
+router.get('/about', auditTrail, viewAbout);
+
+router.get('/author', auditTrail, viewAuthor);
 
 export default router;

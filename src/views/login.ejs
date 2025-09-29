@@ -15,7 +15,7 @@
       <%- include('./partials/input-password', {id: "password", maxlength: 50}); %>
     </div>
     <div class="mb-3">
-      <%- include('./partials/input-text', { id: "captcha", maxLength: 5 }); -%>
+      <%- include('./partials/input-text', { id: "captcha", maxlength: 5 }); -%>
     </div>
     <div class="form-capthca">
       <img id="captchaImage" class="border rounded p-1" src="/captcha?t=<%= new Date().getTime() %>" />

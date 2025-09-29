@@ -3,13 +3,16 @@
 // scss-docs-start import-stack
 // Configuration
 @import '/node_modules/bootstrap/scss/functions';
+@import '/node_modules/bootstrap/scss/mixins';
 @import 'variables';
 @import 'variables-dark';
-@import '../app.scss';
+@import '../app';
+@import '../datepicker';
 @import '/node_modules/bootstrap/scss/maps';
-@import '/node_modules/bootstrap/scss/mixins';
+
 @import '/node_modules/bootstrap/scss/utilities';
 @import '../utility';
 
 // Layout & components
 @import 'components';
+@import 'custom-dark';

@@ -1,4 +1,5 @@
 import { logger } from '@/config/winston-config';
+import { auditTrail } from '@/middlewares/audit-trail';
 import {
 	countTodoes,
 	createTodo,
@@ -12,7 +13,7 @@ import { CreateTodoValidation } from '@/validations/todo-validation';
 import express, { NextFunction, Request, Response } from 'express';
 import { treeifyError } from 'zod';
 
-const viewListHandler = async (req: Request, res: Response, next: NextFunction) => {
+const viewListHandler = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
 		const todoes = await findTodoes();
 		const total = await countTodoes();
@@ -55,7 +56,7 @@ const createTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 			if (validation.success) {
 				await createTodo(validation.data.task);
 				toastSuccess(res, res.t('dataIsCreated'));
-				res.redirect('/');
+				res.redirect('/todoes');
 			} else {
 				const errorValidations = treeifyError(validation.error).properties;
 				res.render('todoes/todo-create', {
@@ -100,7 +101,7 @@ const updateTodoHandler = async (req: Request, res: Response, _next: NextFunctio
 		if (validation.success) {
 			await updateTodo(id, validation.data.task, req.body.done === 'on');
 			toastSuccess(res, res.t('dataIsUpdated', validation.data.task));
-			res.redirect('/');
+			res.redirect('/todoes');
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
 			res.render('todoes/todo-update', {
@@ -148,7 +149,7 @@ const toggleStatusHandler = async (req: Request, res: Response, next: NextFuncti
 			toastSuccess(res, res.t('dataIsUpdated', current.task));
 		}
 
-		res.status(200).json({ message: 'OK' });
+		res.json({ message: 'OK' });
 	} catch (error) {
 		next(error);
 	}
@@ -159,16 +160,16 @@ const toggleStatusHandler = async (req: Request, res: Response, next: NextFuncti
  */
 const router = express.Router();
 
-router.get('/', viewListHandler);
-router.get('/todoes/detail/:id', viewDetailHandler);
+router.get('/todoes', auditTrail, viewListHandler);
+router.get('/todoes/detail/:id', auditTrail, viewDetailHandler);
 
-router.get('/todoes/create', viewCreateHandler);
-router.post('/todoes/create', createTodoHandler);
+router.get('/todoes/create', auditTrail, viewCreateHandler);
+router.post('/todoes/create', auditTrail, createTodoHandler);
 
-router.get('/todoes/update/:id', viewUpdateHandler);
-router.post('/todoes/update/:id', updateTodoHandler);
-router.put('/api/todoes/:id', toggleStatusHandler);
+router.get('/todoes/update/:id', auditTrail, viewUpdateHandler);
+router.post('/todoes/update/:id', auditTrail, updateTodoHandler);
+router.put('/api/todoes/:id', auditTrail, toggleStatusHandler);
 
-router.delete('/api/todoes/:id', deleteTodoHandler);
+router.delete('/api/todoes/:id', auditTrail, deleteTodoHandler);
 
 export default router;

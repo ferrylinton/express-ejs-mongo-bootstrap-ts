@@ -27,9 +27,9 @@ export class ThemeToggle {
 			this.schemeToLocalStorage();
 
 			// reload page
-			const currentUrl = new URL(window.location.href);
-			const newUrl = currentUrl.origin + currentUrl.pathname;
-			window.location.href = newUrl;
+			// const currentUrl = new URL(window.location.href);
+			// const newUrl = currentUrl.origin + currentUrl.pathname;
+			// window.location.href = newUrl;
 		});
 	}
 

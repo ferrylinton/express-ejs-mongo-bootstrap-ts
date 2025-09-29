@@ -70,14 +70,9 @@ export const findUsers = async ({ page, keyword, sort }: RequestParams) => {
 			pageSize: PAGE_SIZE,
 		},
 		sort,
-		keyword,
 	};
 
 	if (arr.length) {
-		if (keyword) {
-			result.keyword = keyword;
-		}
-
 		result.pagination.page = page || 0;
 		result.pagination.totalPage = Math.ceil(arr[0].pagination.total / PAGE_SIZE);
 		result.pagination.pageSize = PAGE_SIZE;
@@ -120,7 +115,6 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const createUser = async (createUser: CreateUser, createdBy?: string) => {
-	console.log(createUser);
 	createUser.password = bcrypt.hashSync(createUser.password, 10);
 	const user: Omit<User, 'id'> = {
 		...createUser,
@@ -128,8 +122,7 @@ export const createUser = async (createUser: CreateUser, createdBy?: string) => 
 		createdBy: createdBy || createUser.username,
 		createdAt: new Date(),
 	};
-	console.log('inputttttttttttttttttttttttttttttt');
-	console.log(user);
+
 	const userCollection = await getCollection<Omit<User, 'id'>>(USER_COLLECTION);
 	return await userCollection.insertOne(user);
 };

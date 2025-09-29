@@ -1,10 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { logger } from '@/config/winston-config';
+import { updateAuditTrail } from '@/services/audit-trail-service';
+import { NextFunction, Request, Response } from 'express';
 
-export interface AppError extends Error {
-	status?: number;
-}
+export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
+	logger.error(error);
 
-export const errorHandler = (err: AppError, req: Request, res: Response, _next: NextFunction) => {
-	console.error(err);
+	if (res.locals.requestId) {
+		updateAuditTrail(res.locals.requestId, error.message).catch(logger.error);
+	}
+
 	res.render('error');
 };

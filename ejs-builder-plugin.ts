@@ -56,7 +56,7 @@ async function buildBackend(outDir: string) {
 			emptyOutDir: false,
 			rollupOptions: {
 				output: {
-					format: 'cjs',
+					format: 'esm',
 					entryFileNames: 'server.js',
 					chunkFileNames: '[name]-[hash].js',
 					assetFileNames: '[name]-[hash].[ext]',
@@ -131,7 +131,7 @@ export const ejsBuilder = (hash: string): PluginOption => {
 
 				fse.copySync('package.json', `${config.build.outDir}/package.json`);
 				await execa({ cwd: config.build.outDir })`npm pkg delete devDependencies`;
-				await execa({ cwd: config.build.outDir })`npm pkg set type=commonjs`;
+				//await execa({ cwd: config.build.outDir })`npm pkg set type=commonjs`;
 			},
 
 			async writeBundle(__options, bundle) {

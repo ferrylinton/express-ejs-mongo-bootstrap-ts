@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#3c790a" media="(prefers-color-scheme: dark)" />
 <title><%= title || 'Todo App' %></title>
 
-<% if (bootstrapVariant) { %>
+<% if (typeof bootstrapVariant !== 'undefined' && bootstrapVariant) { %>
 <link rel="stylesheet" href="<%= bootstrapVariant.url %>" />
 <% } %>
 

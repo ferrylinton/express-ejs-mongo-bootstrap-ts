@@ -7,20 +7,20 @@ import { rateLimit } from '@/middlewares/rate-limit';
 import authRoute from '@/routes/auth-route';
 import captchaRoute from '@/routes/captcha-route';
 import messageRoute from '@/routes/message-route';
+import profileRoute from '@/routes/profile-route';
 import publicRoute from '@/routes/public-route';
 import todoRoute from '@/routes/todo-route';
-import profileRoute from '@/routes/profile-route';
+import auditTrailRoute from '@/routes/audit-trail-route';
 import { QueryParams } from '@/types/express-type';
 import { getBootstrapVariants, initLocale, initTheme, initVariant } from '@/utils/app-util';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express, { NextFunction, Request, Response } from 'express';
+import expressLayouts from 'express-ejs-layouts';
 import favicon from 'express-favicon';
 import path from 'path';
-import expressLayouts from 'express-ejs-layouts';
-import morgan from 'morgan';
-import { v4 as uuidv4 } from 'uuid';
-import { initToast } from './utils/toast-util';
+import { initToast } from '@/utils/toast-util';
+import { nanoid } from 'nanoid';
 
 export const app = express();
 app.set('trust proxy', 1);
@@ -41,11 +41,6 @@ app.set('views', path.join(APP_PATH, 'views'));
 app.use(favicon(path.join(APP_PATH, 'favicon.ico')));
 app.use('/assets', express.static(path.join(APP_PATH, 'assets')));
 
-app.use((req, res, next) => {
-	req.id = uuidv4();
-	next();
-});
-
 app.use(
 	(req: Request<unknown, unknown, unknown, QueryParams>, res: Response, next: NextFunction) => {
 		try {
@@ -53,12 +48,12 @@ app.use(
 			res.locals.currentPath = req.path;
 			res.locals.NODE_ENV = NODE_ENV;
 			res.locals.bootstrapVariants = variants;
+			res.locals.requestId = nanoid();
 
 			initLocale(req, res);
 			initVariant(req, res);
 			initTheme(req, res);
 			initToast(req, res);
-
 			next();
 		} catch (error) {
 			next(error);
@@ -67,23 +62,6 @@ app.use(
 );
 
 // Middlewares
-//app.use(morgan('dev'));
-morgan.token('id', (req: Request<unknown, unknown, unknown, QueryParams>) => req.id);
-app.use(
-	morgan((tokens, req, res) => {
-		const entry = {
-			requestId: tokens.id(req, res),
-			method: tokens.method(req, res),
-			url: tokens.url(req, res),
-			status: parseInt(tokens.status(req, res) || '', 10),
-			responseTime: tokens['response-time'](req, res),
-		};
-		console.log('morgan..............................');
-		console.log(req.body);
-		console.log(entry);
-		return null;
-	})
-);
 app.use(rateLimit);
 app.use(authFilter);
 
@@ -94,6 +72,7 @@ app.use('/', authRoute);
 app.use('/', messageRoute);
 app.use('/', todoRoute);
 app.use('/', captchaRoute);
+app.use('/', auditTrailRoute);
 
 app.use('/429', function (_req, res, _next) {
 	res.status(429).render('429');

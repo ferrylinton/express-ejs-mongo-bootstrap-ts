@@ -1,3 +1,4 @@
+import { auditTrail } from '@/middlewares/audit-trail';
 import express, { NextFunction, Request, Response } from 'express';
 
 const viewProfile = async (_req: Request, res: Response, next: NextFunction) => {
@@ -13,6 +14,6 @@ const viewProfile = async (_req: Request, res: Response, next: NextFunction) => 
  */
 const router = express.Router();
 
-router.get('/profile', viewProfile);
+router.get('/profile', auditTrail, viewProfile);
 
 export default router;

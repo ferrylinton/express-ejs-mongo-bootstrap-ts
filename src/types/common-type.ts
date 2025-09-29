@@ -15,7 +15,6 @@ export type ResponseMessage = {
 export type Pageable<T> = {
 	data: Array<T>;
 	pagination: Pagination;
-	keyword?: string;
 	sort?: string;
 };
 
@@ -24,6 +23,11 @@ export type Pagination = {
 	totalPage: number;
 	page: number;
 	pageSize: number;
+	firstQueryString?: string;
+	previousQueryString?: string;
+	nextQueryString?: string;
+	lastQueryString?: string;
+	firstRowNumber?: number;
 };
 
 export type FindResult<T> = {

@@ -2,7 +2,6 @@ export {};
 
 declare global {
 	interface Window {
-		toast: () => void;
-		reloadCaptcha: () => void;
+		initDateRangePicker: (startDate: string | undefined, endDate: string | undefined) => void;
 	}
 }

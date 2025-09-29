@@ -44,8 +44,8 @@
   </table>
 
   <div class="d-flex gap-2 my-4">
-    <a href="/" role="button" class="btn btn-secondary">
-      <i class="icon" style="width: 21px; height: 21px;"><%- include('../icons/previous-icon'); -%></i>
+    <a id="back-link" href="/todoes" role="button" class="btn btn-secondary">
+      <i class="icon" style="width: 21px; height: 21px;"><%- include('../icons/back-icon'); -%></i>
       <span><%= t('back') %></span>
     </a>
     <button type="button" class="btn btn-danger" data-message="<%= t('deleteData') %>" data-delete="<%= todo.id %>">

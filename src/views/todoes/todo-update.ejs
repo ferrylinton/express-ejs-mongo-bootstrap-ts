@@ -15,8 +15,8 @@
       <%- include('../partials/checkbox', { id: "done" }); -%>
     </div>
     <div class="d-flex gap-2 my-4">
-      <a href="/" role="button" class="btn btn-secondary btn-icon">
-        <i class="icon" style="width: 22px; height: auto;"><%- include('../icons/previous-icon'); -%></i>
+      <a id="back-link" href="/todoes" role="button" class="btn btn-secondary btn-icon">
+        <i class="icon" style="width: 22px; height: auto;"><%- include('../icons/back-icon'); -%></i>
         <span><%= t('back') %></span>
       </a>
       <button type="submit" class="btn btn-primary btn-icon">

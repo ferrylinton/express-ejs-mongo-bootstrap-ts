@@ -32,7 +32,7 @@ export class Todo {
 
 					if (answer) {
 						await apiClient.put(`/api/todoes/${target.id}`);
-						window.location.replace('/');
+						window.location.replace('/todoes');
 					}
 				} catch (error) {
 					console.log(error);
@@ -56,7 +56,7 @@ export class Todo {
 
 						if (answer) {
 							await apiClient.delete(`/api/todoes/${id}`);
-							window.location.replace('/');
+							window.location.replace('/todoes');
 						}
 					}
 				} catch (error) {

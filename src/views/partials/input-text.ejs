@@ -3,7 +3,7 @@
 %>
 
 <label for="<%= id %>" class="form-label"><%= t(id) %></label>
-<input type="text" id="<%= id %>" name="<%= id %>" value="<%= locals.formData && locals.formData[id] %>" maxlength="<%=locals.maxlength%>" placeholder="<%= t(id) %>" class="<%=className%>" autocomplete="off" <%=locals.autofocus%> />
+<input type="text" id="<%= id %>" name="<%= id %>" value="<%= (id !== 'captcha') && locals.formData ? locals.formData[id] : '' %>" maxlength="<%=locals.maxlength%>" placeholder="<%= t(id) %>" class="<%=className%>" autocomplete="off" <%=locals.autofocus%> />
 <% if (locals.errorValidations && locals.errorValidations[id]) { %>
 <div class="invalid-feedback">
   <%= t(errorValidations[id].errors[0]) %>

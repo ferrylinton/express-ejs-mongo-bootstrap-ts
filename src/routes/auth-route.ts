@@ -2,13 +2,15 @@ import { LOGGED_USER } from '@/config/app-constant';
 import { AUTH_COOKIE_MAX_AGE } from '@/config/env-constant';
 import { logger } from '@/config/winston-config';
 import AuthError from '@/errors/auth-error';
+import { auditTrail } from '@/middlewares/audit-trail';
+import { updateAuditTrail } from '@/services/audit-trail-service';
 import { authenticate } from '@/services/auth-service';
 import { createUser } from '@/services/user-service';
 import { decrypt, encrypt } from '@/utils/encrypt-util';
 import { toastSuccess } from '@/utils/toast-util';
 import { LoginValidation, RegisterValidation } from '@/validations/auth-validation';
 import express, { NextFunction, Request, Response } from 'express';
-import { treeifyError } from 'zod';
+import { flattenError, treeifyError } from 'zod';
 
 const viewLogin = async (_req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -26,18 +28,12 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 			const captchaFromCookies = req.cookies['captcha'];
 
 			if (!captchaFromCookies) {
-				return res.render('login', {
-					toast: { message: res.t('captchaIsExpired'), type: 'danger' },
-					formData: req.body,
-				});
+				throw new AuthError('captchaIsExpired');
 			}
 
 			const plainCaptcha = await decrypt(captchaFromCookies);
 			if (plainCaptcha !== validation.data.captcha) {
-				res.render('login', {
-					toast: { message: res.t('captchaIsNotMatch'), type: 'danger' },
-					formData: req.body,
-				});
+				throw new AuthError('captchaIsNotMatch');
 			} else {
 				const { username, password } = validation.data;
 				const loggedUser = await authenticate(username, password);
@@ -51,6 +47,11 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 			}
 		} else {
 			const errorValidations = treeifyError(validation.error).properties;
+			updateAuditTrail(
+				res.locals.requestId,
+				flattenError(validation.error).fieldErrors
+			).catch(logger.error);
+
 			res.render('login', {
 				formData: req.body,
 				errorValidations,
@@ -61,8 +62,11 @@ const postLogin = async (req: Request, res: Response, next: NextFunction) => {
 
 		if (error instanceof AuthError) {
 			const authError = error as AuthError;
+			const message = res.t(authError.message);
+
+			updateAuditTrail(res.locals.requestId, message).catch(logger.error);
 			res.render('login', {
-				toast: { message: res.t(authError.message), type: 'danger' },
+				toast: { message, type: 'danger' },
 				formData: req.body,
 			});
 		} else {
@@ -138,14 +142,14 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
  */
 const router = express.Router();
 
-router.get('/login', viewLogin);
+router.get('/login', auditTrail, viewLogin);
 
-router.post('/login', postLogin);
+router.post('/login', auditTrail, postLogin);
 
-router.post('/logout', postLogout);
+router.post('/logout', auditTrail, postLogout);
 
-router.get('/register', viewRegister);
+router.get('/register', auditTrail, viewRegister);
 
-router.post('/register', postRegister);
+router.post('/register', auditTrail, postRegister);
 
 export default router;
