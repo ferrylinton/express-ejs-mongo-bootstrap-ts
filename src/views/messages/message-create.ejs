@@ -17,9 +17,16 @@
     <div class="mb-3">
       <%- include('../partials/input-text', { id: "captcha", maxLength: 5 }); -%>
     </div>
-    <div class="form-capthca">
-      <img id="captchaImage" class="border rounded p-1" src="/captcha" />
-      <button type="button" role="reload-captcha" class="text-secondary text-primary-hover bg-transparent border rounded" onclick="window.reloadCaptcha(this)">
+    <div class="captcha-control">
+      <div class="image-box">
+        <img id="captchaImage" />
+        <div id="captchaSpinner">
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="text-secondary text-primary-hover bg-transparent border rounded" onclick="window.fetchCaptcha()">
         <%- include('../icons/reload-icon'); -%>
       </button>
     </div>

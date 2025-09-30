@@ -1,11 +1,11 @@
-import { Dropdown, Offcanvas, Toast } from 'bootstrap';
-import { confirm } from './confirm';
-import { ThemeToggle } from './theme-toggle';
-import { Todo } from './todo';
-import { format, subMonths } from 'date-fns';
 import AirDatepicker from 'air-datepicker';
 import localeEn from 'air-datepicker/locale/en';
 import localeId from 'air-datepicker/locale/id';
+import { Dropdown, Offcanvas, Toast } from 'bootstrap';
+import { format, subMonths } from 'date-fns';
+import { confirm } from './confirm';
+import { ThemeToggle } from './theme-toggle';
+import { Todo } from './todo';
 
 const initMenuToggle = () => {
 	const menuToggle = document.getElementById('menu-toggle');
@@ -48,20 +48,6 @@ const initSidebar = () => {
 const initThemeToggle = () => {
 	const themeToggle = new ThemeToggle();
 	themeToggle.init();
-};
-
-const initReloadCaptcha = () => {
-	const reloadCaptchaButtonEl = document.getElementById('reloadCaptchaButton');
-	const captchaImageEl = document.getElementById('captchaImage') as HTMLImageElement;
-
-	if (reloadCaptchaButtonEl && captchaImageEl) {
-		reloadCaptchaButtonEl.addEventListener('click', e => {
-			e.preventDefault();
-
-			const current = new Date();
-			captchaImageEl.src = captchaImageEl.src.replace(/\?.*/, '') + '?t=' + current.getTime();
-		});
-	}
 };
 
 const initLogout = () => {
@@ -151,6 +137,36 @@ window.initDateRangePicker = (startDate: string | undefined, endDate: string | u
 	}
 };
 
+window.fetchCaptcha = async () => {
+	const captchaSpinnerEl = document.getElementById('captchaSpinner');
+	if (captchaSpinnerEl) {
+		captchaSpinnerEl.style.display = 'flex';
+	}
+
+	try {
+		const captchaImageEl = document.getElementById('captchaImage') as HTMLImageElement;
+
+		if (captchaImageEl) {
+			const current = new Date();
+			const response = await fetch(`/captcha?t=${current.getTime()}`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const blob = await response.blob();
+			const objectURL = URL.createObjectURL(blob);
+			captchaImageEl.src = objectURL;
+		}
+	} catch (error) {
+		console.error('Error fetching or setting image:', error);
+	} finally {
+		if (captchaSpinnerEl) {
+			setTimeout(function () {
+				captchaSpinnerEl.style.display = 'none';
+			}, 250);
+		}
+	}
+};
+
 window.addEventListener('load', () => {
 	console.log('Page and all resources loaded!');
 
@@ -159,10 +175,10 @@ window.addEventListener('load', () => {
 	initToat();
 	initDropdown();
 	initSidebar();
-	initReloadCaptcha();
 	initLogout();
 	initSidebarMenu();
 	initFormatDatetime();
+	window.fetchCaptcha();
 
 	Todo.init();
 });

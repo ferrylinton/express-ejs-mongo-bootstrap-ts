@@ -129,6 +129,7 @@ export const ejsBuilder = (hash: string): PluginOption => {
 				fse.copySync('src/assets/image', `${config.build.outDir}/assets/image`);
 				fse.copySync('src/locales', `${config.build.outDir}/locales`);
 
+				fse.copySync('ecosystem.config.cjs', `${config.build.outDir}/ecosystem.config.cjs`);
 				fse.copySync('package.json', `${config.build.outDir}/package.json`);
 				await execa({ cwd: config.build.outDir })`npm pkg delete devDependencies`;
 				//await execa({ cwd: config.build.outDir })`npm pkg set type=commonjs`;
