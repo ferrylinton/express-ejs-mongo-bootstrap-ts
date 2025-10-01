@@ -38,10 +38,10 @@ const initDropdown = () => {
 };
 
 const initSidebar = () => {
-	const offcanvasResponsiveEl = document.getElementById('offcanvasResponsive');
+	const offcanvasResponsiveEl = document.getElementById('sidebarOffcanvas');
 
 	if (offcanvasResponsiveEl) {
-		new Offcanvas(offcanvasResponsiveEl);
+		window.sidebarOffcanvas = new Offcanvas(offcanvasResponsiveEl);
 	}
 };
 
@@ -149,7 +149,10 @@ window.fetchCaptcha = async () => {
 		if (captchaImageEl) {
 			const current = new Date();
 			const response = await fetch(`/captcha?t=${current.getTime()}`);
-			if (!response.ok) {
+
+			if (response.status === 429) {
+				window.location.href = '/429';
+			} else if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 			const blob = await response.blob();

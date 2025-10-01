@@ -2187,7 +2187,7 @@ progress{
   --bs-table-bg-state:initial;
   --bs-table-color:initial;
   --bs-table-bg:var(--bs-body-bg);
-  --bs-table-border-color:rgba(0, 0, 0, 0.05);
+  --bs-table-border-color:var(--bs-border-color);
   --bs-table-accent-bg:transparent;
   --bs-table-striped-color:initial;
   --bs-table-striped-bg:rgba(var(--bs-emphasis-color-rgb), 0.05);
@@ -2198,7 +2198,7 @@ progress{
   width:100%;
   margin-bottom:1rem;
   vertical-align:top;
-  border-color:rgba(0, 0, 0, 0.05);
+  border-color:#eceeef;
   border-color:var(--bs-table-border-color);
 }
 .table > :not(caption) > * > *{
@@ -6182,6 +6182,27 @@ textarea.form-control-lg{
   background-color:currentcolor;
   opacity:0.25;
 }
+.fs-1{
+  font-size:calc(1.425rem + 2.1vw) !important;
+}
+.fs-2{
+  font-size:calc(1.375rem + 1.5vw) !important;
+}
+.fs-3{
+  font-size:calc(1.325rem + 0.9vw) !important;
+}
+.fs-4{
+  font-size:calc(1.275rem + 0.3vw) !important;
+}
+.fs-5{
+  font-size:1.25rem !important;
+}
+.fs-6{
+  font-size:1rem !important;
+}
+.fs-7{
+  font-size:0.875rem !important;
+}
 .align-baseline{
   vertical-align:baseline !important;
 }
@@ -7098,24 +7119,6 @@ textarea.form-control-lg{
 .font-monospace{
   font-family:SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   font-family:var(--bs-font-monospace) !important;
-}
-.fs-1{
-  font-size:calc(1.375rem + 1.5vw) !important;
-}
-.fs-2{
-  font-size:calc(1.325rem + 0.9vw) !important;
-}
-.fs-3{
-  font-size:calc(1.3rem + 0.6vw) !important;
-}
-.fs-4{
-  font-size:calc(1.275rem + 0.3vw) !important;
-}
-.fs-5{
-  font-size:1.25rem !important;
-}
-.fs-6{
-  font-size:1rem !important;
 }
 .fst-italic{
   font-style:italic !important;
@@ -10656,13 +10659,13 @@ textarea.form-control-lg{
 }
 @media (min-width: 1200px){
   .fs-1{
-    font-size:2.5rem !important;
+    font-size:3rem !important;
   }
   .fs-2{
-    font-size:2rem !important;
+    font-size:2.5rem !important;
   }
   .fs-3{
-    font-size:1.75rem !important;
+    font-size:2rem !important;
   }
   .fs-4{
     font-size:1.5rem !important;

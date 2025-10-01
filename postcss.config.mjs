@@ -26,7 +26,7 @@ export default {
 					content: ['./src/**/*.ejs', './src/**/*.css'],
 					css: ['./src/**/*.css'],
 					fontFace: true,
-					keyframes: true,
+					keyframes: false,
 					variables: false,
 					safelist: [
 						/data-bs-theme$/,
@@ -34,7 +34,7 @@ export default {
 						/^modal-/,
 						/^offcanvas-/,
 						':root',
-						'show',
+						'show'
 					],
 				})
 			: null,

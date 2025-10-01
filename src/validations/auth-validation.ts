@@ -1,49 +1,49 @@
 import z from 'zod';
 
 export const LoginValidation = z.object({
-	username: z.string().min(3, 'invalid.username').max(20, 'invalid.username'),
-	password: z.string().min(6, 'invalid.password').max(30, 'invalid.password'),
+	username: z.string().min(3, 'invalidUsername').max(20, 'invalidUsername'),
+	password: z.string().min(6, 'invalidPassword').max(30, 'invalidPassword'),
 	captcha: z
-		.string({ message: 'invalid.captcha' })
-		.min(5, 'invalid.captcha')
-		.max(5, 'invalid.captcha'),
+		.string({ message: 'invalidCaptcha' })
+		.min(5, 'invalidCaptcha')
+		.max(5, 'invalidCaptcha'),
 });
 
 export const RegisterValidation = z
 	.object({
-		username: z.string().min(3, 'invalid.username').max(20, 'invalid.username'),
-		email: z.email({ message: 'invalid.email' }).max(50, 'invalid.email'),
-		password: z.string().min(6, 'invalid.password').max(30, 'invalid.password'),
-		passwordConfirm: z
+		username: z.string().min(3, 'invalidUsername').max(20, 'invalidUsername'),
+		email: z.email({ message: 'invalidEmail' }).max(50, 'invalidEmail'),
+		password: z.string().min(6, 'invalidPassword').max(30, 'invalidPassword'),
+		confirmPassword: z
 			.string()
-			.min(6, 'invalid.passwordConfirm')
-			.max(30, 'invalid.passwordConfirm'),
+			.min(6, 'invalidConfirmPassword')
+			.max(30, 'invalidConfirmPassword'),
 		captcha: z
-			.string({ message: 'invalid.captcha' })
-			.min(5, 'invalid.captcha')
-			.max(5, 'invalid.captcha'),
+			.string({ message: 'invalidCaptcha' })
+			.min(5, 'invalidCaptcha')
+			.max(5, 'invalidCaptcha'),
 	})
-	.refine(data => data.password === data.passwordConfirm, {
-		path: ['passwordConfirm'],
-		message: 'notMatch.passwordConfirm',
+	.refine(data => data.password === data.confirmPassword, {
+		path: ['confirmPassword'],
+		message: 'confirmPasswordNotMatch',
 	});
 
 export const ResetPasswordValidation = z
 	.object({
-		token: z.string().min(20, 'invalid.token').max(30, 'invalid.token'),
-		password: z.string().min(6, 'invalid.password').max(30, 'invalid.password'),
-		passwordConfirm: z
+		token: z.string().min(20, 'invalidToken').max(30, 'invalidToken'),
+		password: z.string().min(6, 'invalidPassword').max(30, 'invalidPassword'),
+		confirmPassword: z
 			.string()
-			.min(6, 'invalid.passwordConfirm')
-			.max(30, 'invalid.passwordConfirm'),
+			.min(6, 'invalidConfirmPassword')
+			.max(30, 'invalidConfirmPassword'),
 	})
-	.refine(data => data.password === data.passwordConfirm, {
-		path: ['passwordConfirm'],
-		message: 'notMatch.passwordConfirm',
+	.refine(data => data.password === data.confirmPassword, {
+		path: ['confirmPassword'],
+		message: 'confirmPasswordNotMatch',
 	});
 
 export const ForgotPasswordValidation = z.object({
-	email: z.email({ message: 'invalid.email' }).max(50, 'invalid.email'),
+	email: z.email({ message: 'invalidEmail' }).max(50, 'invalidEmail'),
 });
 
 export type LoginType = z.infer<typeof LoginValidation>;

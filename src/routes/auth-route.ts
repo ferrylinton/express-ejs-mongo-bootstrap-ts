@@ -10,6 +10,7 @@ import { decrypt, encrypt } from '@/utils/encrypt-util';
 import { toastSuccess } from '@/utils/toast-util';
 import { LoginValidation, RegisterValidation } from '@/validations/auth-validation';
 import express, { NextFunction, Request, Response } from 'express';
+import { MongoServerError } from 'mongodb';
 import { flattenError, treeifyError } from 'zod';
 
 const viewLogin = async (_req: Request, res: Response, next: NextFunction) => {
@@ -128,11 +129,28 @@ const postRegister = async (req: Request, res: Response, _next: NextFunction) =>
 		}
 	} catch (error: any) {
 		logger.error(error);
-		const message = error.message;
+
+		let message = error.message;
+
+		if (error instanceof MongoServerError) {
+			const mongoServerError = error as MongoServerError;
+
+			if (
+				mongoServerError.message.includes('duplicate') &&
+				mongoServerError.message.includes('username')
+			) {
+				message = res.t('duplicateData', req.body.username);
+			} else if (
+				mongoServerError.message.includes('duplicate') &&
+				mongoServerError.message.includes('email')
+			) {
+				message = res.t('duplicateData', req.body.email);
+			}
+		}
+
 		res.render('register', {
-			message,
-			messageType: 'error',
 			formData: req.body,
+			toast: { message, type: 'danger' },
 		});
 	}
 };

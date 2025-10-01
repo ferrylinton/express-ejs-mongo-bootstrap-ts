@@ -1,27 +1,4 @@
 @charset "UTF-8";
-.sidebar{
-  --bs-body-color:var(--bs-white);
-  --bs-body-color-rgb:255, 255, 255;
-  --bs-body-bg:rgb(11.7167381974, 75.7682403433, 170.2832618026);
-  --bs-body-bg-rgb:15, 97, 218;
-  --bs-tertiary-bg:rgb(12, 77.6, 174.4);
-  --border-color:rgba(255, 255, 255, 0.25);
-}
-.sidebar .dropdown-menu{
-  --bs-dropdown-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
-  --bs-dropdown-link-active-bg:rgb(9.4184549356, 60.9060085837, 136.8815450644);
-  --bs-border-color-translucent:rgba(255, 255, 255, 0.25);
-}
-.sidebar .btn-primary{
-  --bs-btn-bg:rgb(12.0450643777, 77.891416309, 175.0549356223);
-  --bs-btn-border-color:rgba(255, 255, 255, 0.25);
-  --bs-btn-hover-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
-  --bs-btn-hover-border-color:rgba(255, 255, 255, 0.25);
-  --bs-btn-active-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
-  --bs-btn-active-border-color:rgba(255, 255, 255, 0.5);
-  --bs-btn-focus-border-color:rgba(255, 255, 255, 0.5);
-  --bs-btn-focus-box-shadow:0 0 0 0.25rem rgba(255, 255, 255, 0.2);
-}
 .bg-blue-op-01-hover:hover{
   background-color:rgba(var(--bs-blue-rgb), 0.1);
 }
@@ -341,6 +318,29 @@
 .s-50px{
   width:50px;
   height:50px;
+}
+.sidebar{
+  --bs-body-color:var(--bs-white);
+  --bs-body-color-rgb:255, 255, 255;
+  --bs-body-bg:rgb(11.7167381974, 75.7682403433, 170.2832618026);
+  --bs-body-bg-rgb:15, 97, 218;
+  --bs-tertiary-bg:rgb(12, 77.6, 174.4);
+  --border-color:rgba(255, 255, 255, 0.25);
+}
+.sidebar .dropdown-menu{
+  --bs-dropdown-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
+  --bs-dropdown-link-active-bg:rgb(9.4184549356, 60.9060085837, 136.8815450644);
+  --bs-border-color-translucent:rgba(255, 255, 255, 0.25);
+}
+.sidebar .btn-primary{
+  --bs-btn-bg:rgb(12.0450643777, 77.891416309, 175.0549356223);
+  --bs-btn-border-color:rgba(255, 255, 255, 0.25);
+  --bs-btn-hover-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
+  --bs-btn-hover-border-color:rgba(255, 255, 255, 0.25);
+  --bs-btn-active-bg:rgb(10.0751072961, 65.152360515, 146.4248927039);
+  --bs-btn-active-border-color:rgba(255, 255, 255, 0.5);
+  --bs-btn-focus-border-color:rgba(255, 255, 255, 0.5);
+  --bs-btn-focus-box-shadow:0 0 0 0.25rem rgba(255, 255, 255, 0.2);
 }
 :root,
 [data-bs-theme=light]{
@@ -7000,13 +7000,13 @@ textarea.form-control-lg{
   font-family:var(--bs-font-monospace) !important;
 }
 .fs-1{
-  font-size:calc(1.375rem + 1.5vw) !important;
+  font-size:calc(1.425rem + 2.1vw) !important;
 }
 .fs-2{
-  font-size:calc(1.325rem + 0.9vw) !important;
+  font-size:calc(1.375rem + 1.5vw) !important;
 }
 .fs-3{
-  font-size:calc(1.3rem + 0.6vw) !important;
+  font-size:calc(1.325rem + 0.9vw) !important;
 }
 .fs-4{
   font-size:calc(1.275rem + 0.3vw) !important;
@@ -7016,6 +7016,9 @@ textarea.form-control-lg{
 }
 .fs-6{
   font-size:1rem !important;
+}
+.fs-7{
+  font-size:0.875rem !important;
 }
 .fst-italic{
   font-style:italic !important;
@@ -10556,13 +10559,13 @@ textarea.form-control-lg{
 }
 @media (min-width: 1200px){
   .fs-1{
-    font-size:2.5rem !important;
+    font-size:3rem !important;
   }
   .fs-2{
-    font-size:2rem !important;
+    font-size:2.5rem !important;
   }
   .fs-3{
-    font-size:1.75rem !important;
+    font-size:2rem !important;
   }
   .fs-4{
     font-size:1.5rem !important;

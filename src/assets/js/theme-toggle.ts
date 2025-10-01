@@ -26,10 +26,9 @@ export class ThemeToggle {
 			this.scheme = this.checkbox!.checked ? 'dark' : 'light';
 			this.schemeToLocalStorage();
 
-			// reload page
-			// const currentUrl = new URL(window.location.href);
-			// const newUrl = currentUrl.origin + currentUrl.pathname;
-			// window.location.href = newUrl;
+			if (window.sidebarOffcanvas) {
+				window.sidebarOffcanvas.hide();
+			}
 		});
 	}
 

@@ -6127,6 +6127,27 @@ textarea.form-control-lg{
   background-color:currentcolor;
   opacity:0.25;
 }
+.fs-1{
+  font-size:calc(1.425rem + 2.1vw) !important;
+}
+.fs-2{
+  font-size:calc(1.375rem + 1.5vw) !important;
+}
+.fs-3{
+  font-size:calc(1.325rem + 0.9vw) !important;
+}
+.fs-4{
+  font-size:calc(1.275rem + 0.3vw) !important;
+}
+.fs-5{
+  font-size:1.25rem !important;
+}
+.fs-6{
+  font-size:1rem !important;
+}
+.fs-7{
+  font-size:0.875rem !important;
+}
 .align-baseline{
   vertical-align:baseline !important;
 }
@@ -7043,24 +7064,6 @@ textarea.form-control-lg{
 .font-monospace{
   font-family:SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   font-family:var(--bs-font-monospace) !important;
-}
-.fs-1{
-  font-size:calc(1.425rem + 2.1vw) !important;
-}
-.fs-2{
-  font-size:calc(1.375rem + 1.5vw) !important;
-}
-.fs-3{
-  font-size:calc(1.325rem + 0.9vw) !important;
-}
-.fs-4{
-  font-size:calc(1.275rem + 0.3vw) !important;
-}
-.fs-5{
-  font-size:1.25rem !important;
-}
-.fs-6{
-  font-size:1rem !important;
 }
 .fst-italic{
   font-style:italic !important;

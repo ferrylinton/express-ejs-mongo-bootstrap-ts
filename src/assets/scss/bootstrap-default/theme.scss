@@ -4,14 +4,17 @@
 // Configuration
 @import '/node_modules/bootstrap/scss/functions';
 @import '/node_modules/bootstrap/scss/mixins';
+
+@import '../custom-variables';
 @import 'variables';
 @import 'variables-dark';
+@import '../utility';
 @import '../app';
 @import '/node_modules/bootstrap/scss/maps';
 
 @import '/node_modules/bootstrap/scss/utilities';
-@import '../utility';
 
 // Layout & components
 @import 'components';
 @import 'custom-dark';
+

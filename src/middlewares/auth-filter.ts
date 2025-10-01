@@ -4,7 +4,7 @@ import { extractLoggedUser } from '@/services/auth-service';
 import { toastDanger } from '@/utils/toast-util';
 import { NextFunction, Request, Response } from 'express';
 
-const publicUrlRegex = /login|register|about|author|message|captcha|\/todoes/;
+const publicUrlRegex = /login|register|about|author|message|captcha|429|\/todoes/;
 
 export const authFilter = async (req: Request, res: Response, next: NextFunction) => {
 	try {

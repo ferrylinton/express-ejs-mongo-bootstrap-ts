@@ -15,10 +15,11 @@ const viewMessageHandler = async (_req: Request, res: Response, next: NextFuncti
 	}
 };
 
-const viewMessageListHandler = async (_req: Request, res: Response, next: NextFunction) => {
+const viewMessageListHandler = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const pageable = await findMessages(null, 1);
-		res.render('messages/message-list', { pageable });
+		const { page = '1' } = req.query;
+		const { data, pagination } = await findMessages(parseInt(page as string, 10));
+		res.render('messages/message-list', { data, pagination });
 	} catch (error) {
 		next(error);
 	}

@@ -3,6 +3,7 @@
 // scss-docs-start import-stack
 // Configuration
 @import '/node_modules/bootstrap/scss/functions';
+@import '../custom-variables';
 @import 'variables';
 @import '../bootstrap-default/variables';
 @import '../bootstrap-default/variables-dark';

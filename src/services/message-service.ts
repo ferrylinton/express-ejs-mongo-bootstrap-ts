@@ -5,22 +5,16 @@ import { Message } from '@/types/message-type';
 import { mapToObject } from '@/utils/json-util';
 import { PAGE_SIZE } from '@/utils/pagination-util';
 import { DeleteResult, ObjectId, UpdateResult, WithId } from 'mongodb';
+import queryString from 'query-string';
+import { stringify } from 'querystring';
 
 export const MESSAGE_COLLECTION = 'messages';
 
-export const findMessages = async (keyword: string | null, page: number) => {
+export const findMessages = async (page: number = 1) => {
 	page = page <= 0 ? 1 : page;
 	const messageCollection = await getCollection<Message>(MESSAGE_COLLECTION);
 
 	const pipeline = [
-		{
-			$match: {},
-		},
-		{
-			$project: {
-				message: 0,
-			},
-		},
 		{
 			$sort: {
 				createdAt: -1,
@@ -48,47 +42,50 @@ export const findMessages = async (keyword: string | null, page: number) => {
 		},
 	];
 
-	if (keyword) {
-		const regex = new RegExp(keyword, 'i');
-		pipeline[0]['$match'] = {
-			$or: [{ email: regex }, { message: regex }],
-		};
-
-		logger.info('POST.find : ' + JSON.stringify(pipeline).replaceAll('{}', regex.toString()));
-	} else {
-		pipeline.shift();
-		logger.info('POST.find : ' + JSON.stringify(pipeline));
-	}
-
+	logger.info('Message.find : ' + JSON.stringify(pipeline));
 	const arr = await messageCollection.aggregate<Pageable<WithId<Message>>>(pipeline).toArray();
+	const pageable =
+		arr.length > 0
+			? arr[0]
+			: {
+					data: [],
+					pagination: {
+						total: 0,
+						totalPage: 0,
+						page: 1,
+						pageSize: 10,
+					},
+				};
 
-	if (arr.length && arr[0]) {
-		if (keyword) {
-			arr[0].keyword = keyword;
-		}
+	pageable.pagination.page = page;
+	pageable.pagination.totalPage = Math.ceil(pageable.pagination.total / PAGE_SIZE);
+	pageable.pagination.pageSize = PAGE_SIZE;
+	pageable.pagination.firstRowNumber = (page - 1) * PAGE_SIZE + 1;
 
-		arr[0].pagination.page = page;
-		arr[0].pagination.totalPage = Math.ceil(arr[0].pagination.total / PAGE_SIZE);
-		arr[0].pagination.pageSize = PAGE_SIZE;
+	pageable.data = pageable.data.map(message => {
+		message.id = message._id.toHexString();
+		return message;
+	});
 
-		arr[0].data = arr[0].data.map(message => {
-			message.id = message._id.toHexString();
-			return message;
+	if (page > 1 && pageable.pagination.totalPage > 1) {
+		pageable.pagination.firstQueryString = stringify({
+			page: 1,
 		});
-
-		return arr[0] as Pageable<Message>;
+		pageable.pagination.previousQueryString = queryString.stringify({
+			page: page - 1,
+		});
 	}
 
-	return {
-		data: [],
-		pagination: {
-			total: 0,
-			totalPage: 0,
-			page: 1,
-			pageSize: 10,
-		},
-		keyword,
-	};
+	if (page < pageable.pagination.totalPage && pageable.pagination.totalPage > 1) {
+		pageable.pagination.nextQueryString = queryString.stringify({
+			page: page + 1,
+		});
+		pageable.pagination.lastQueryString = queryString.stringify({
+			page: pageable.pagination.totalPage,
+		});
+	}
+
+	return pageable;
 };
 
 export const findMessageById = async (id: string): Promise<Message | null> => {
