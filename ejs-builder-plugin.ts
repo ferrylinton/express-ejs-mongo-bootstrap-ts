@@ -3,7 +3,6 @@ import fse from 'fs-extra';
 import { sync } from 'glob';
 import path from 'path';
 import { OutputBundle } from 'rollup';
-import { nodeExternals } from 'rollup-plugin-node-externals';
 import { build, PluginOption, ResolvedConfig } from 'vite';
 
 let source: Record<string, any>;
@@ -36,7 +35,7 @@ async function copyEjsFiles(bundle: OutputBundle, outDir: string, hash: string) 
 	}
 }
 
-async function buildBackend(outDir: string) {
+async function buildBackend(ssr: string, outDir: string) {
 	await build({
 		resolve: {
 			alias: {
@@ -44,26 +43,23 @@ async function buildBackend(outDir: string) {
 			},
 		},
 		ssr: {
-			external: [],
-			noExternal: [],
+			external: true,
 		},
 		build: {
 			outDir,
-			ssr: './src/server.ts',
+			ssr,
 			write: true,
 			minify: false,
 			target: 'esnext',
 			emptyOutDir: false,
 			rollupOptions: {
 				output: {
+					preserveModules: true,
 					format: 'esm',
-					entryFileNames: 'server.js',
-					chunkFileNames: '[name]-[hash].js',
-					assetFileNames: '[name]-[hash].[ext]',
+					entryFileNames: '[name].js',
 				},
 			},
 		},
-		plugins: [nodeExternals()],
 	});
 }
 
@@ -122,7 +118,9 @@ export const ejsBuilder = (hash: string): PluginOption => {
 				if (process.env.STOP_BUILDING) return;
 				process.env.STOP_BUILDING = 'true';
 
-				await buildBackend(config.build.outDir);
+				await buildBackend('./src/db/init-db.ts', config.build.outDir);
+				await buildBackend('./src/db/init-data.ts', config.build.outDir);
+				await buildBackend('./src/server.ts', config.build.outDir);
 
 				fse.copySync('.env', `${config.build.outDir}/.env`);
 				fse.copySync('src/favicon.ico', `${config.build.outDir}/favicon.ico`);
@@ -131,8 +129,19 @@ export const ejsBuilder = (hash: string): PluginOption => {
 
 				fse.copySync('ecosystem.config.cjs', `${config.build.outDir}/ecosystem.config.cjs`);
 				fse.copySync('package.json', `${config.build.outDir}/package.json`);
+				await execa({ cwd: config.build.outDir })`npm pkg delete simple-git-hooks`;
+				await execa({ cwd: config.build.outDir })`npm pkg delete lint-staged`;
 				await execa({ cwd: config.build.outDir })`npm pkg delete devDependencies`;
-				//await execa({ cwd: config.build.outDir })`npm pkg set type=commonjs`;
+				await execa({ cwd: config.build.outDir })`npm pkg delete scripts`;
+
+				const scripts = {
+					'start': 'cross-env NODE_ENV=production node server.js',
+					'init-db': 'node db/init-db.js',
+					'init-data': 'node db/init-data.js',
+				};
+				await execa({
+					cwd: config.build.outDir,
+				})`npm pkg set scripts=${JSON.stringify(scripts)} --json`;
 			},
 
 			async writeBundle(__options, bundle) {
